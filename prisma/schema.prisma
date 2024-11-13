@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Suppliers {
+  supplier_id    Int      @id @default(autoincrement())
+  supplier_name  String
+  contact_person String?
+  phone_number   String?
+  email          String?
+  address        String?
+  medicines      Medicines[]
+}
+
+
+model Patients {
+  patient_id        Int              @id @default(autoincrement())
+  first_name        String
+  last_name         String
+  date_of_birth     DateTime?
+  gender            String?
+  phone_number      String?
+  email             String?
+  address           String?
+  emergency_contact String?
+  medical_history   String?
+  appointments      Appointments[]
+  medical_records   Medical_Records[]
+}
+
+
+model Doctors {
+  doctor_id        Int              @id @default(autoincrement())
+  first_name       String
+  last_name        String
+  specialty        String?
+  phone_number     String?
+  email            String?
+  experience_years Int?
+  working_days     String?
+  appointments     Appointments[]
+  medical_records  Medical_Records[]
+}
+
+
+model Departments {
+  department_id   Int     @id @default(autoincrement())
+  department_name String
+  description     String?
+}
+
+
+model Appointments {
+  appointment_id    Int      @id @default(autoincrement())
+  appointment_date  DateTime
+  reason_for_visit  String?
+  status            String    @default("Scheduled")
+  patient_id        Int
+  doctor_id         Int
+  patient           Patients  @relation(fields: [patient_id], references: [patient_id])
+  doctor            Doctors   @relation(fields: [doctor_id], references: [doctor_id])
+  payments          Payments[]
+}
+
+model Medical_Records {
+  record_id   Int       @id @default(autoincrement())
+  diagnosis   String?
+  treatment   String?
+  record_date DateTime   @default(now())
+  patient_id  Int
+  doctor_id   Int
+  patient     Patients   @relation(fields: [patient_id], references: [patient_id])
+  doctor      Doctors    @relation(fields: [doctor_id], references: [doctor_id])
+  prescriptions Prescriptions[]
+}
+
+model Prescriptions {
+  prescription_id Int                  @id @default(autoincrement())
+  medicine_name   String?
+  dosage          String?
+  duration        String?
+  record_id       Int
+  record          Medical_Records      @relation(fields: [record_id], references: [record_id])
+  prescription_medicines Prescriptions_Medicines[]
+}
+
+model Payments {
+  payment_id      Int       @id @default(autoincrement())
+  payment_date    DateTime  @default(now())
+  amount          Float
+  payment_method  String    @default("Cash")
+  appointment_id  Int
+  appointment     Appointments @relation(fields: [appointment_id], references: [appointment_id])
+}
+
+
+model Medicines {
+  medicine_id       Int                    @id @default(autoincrement())
+  medicine_name     String
+  description       String?
+  quantity_in_stock Int                    @default(0)
+  price_per_unit    Float
+  expiration_date   DateTime?
+  supplier_id       Int
+  supplier          Suppliers              @relation(fields: [supplier_id], references: [supplier_id])
+  stock_transactions Stock_Transactions[]
+  prescription_medicines Prescriptions_Medicines[]
+}
+
+
+model Stock_Transactions {
+  transaction_id   Int       @id @default(autoincrement())
+  transaction_date DateTime  @default(now())
+  transaction_type String
+  quantity         Int
+  notes            String?
+  medicine_id      Int
+  medicine         Medicines @relation(fields: [medicine_id], references: [medicine_id])
+}
+
+
+model Prescriptions_Medicines {
+  prescription_id Int
+  medicine_id     Int
+  quantity        Int
+  prescription    Prescriptions @relation(fields: [prescription_id], references: [prescription_id])
+  medicine        Medicines     @relation(fields: [medicine_id], references: [medicine_id])
+  
+  @@id([prescription_id, medicine_id])
+}
