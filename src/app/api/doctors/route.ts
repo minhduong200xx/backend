@@ -1,23 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// GET: Retrieve all doctors
+//get all
 export async function GET() {
   try {
     const doctors = await prisma.doctors.findMany();
     return NextResponse.json(doctors);
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Failed to fetch doctors" },
       { status: 500 }
     );
   }
 }
-
-// POST: Create a new doctor
-export async function POST(request: Request) {
+//new
+export async function POST(request: NextRequest) {
   try {
     const {
       first_name,
@@ -41,42 +41,26 @@ export async function POST(request: Request) {
     });
     return NextResponse.json(newDoctor, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Failed to create doctor" },
       { status: 500 }
     );
   }
 }
-
-// PUT: Update an existing doctor
-export async function PUT(request: Request) {
+//delete all
+export async function DELETE() {
   try {
-    const { id, first_name, last_name, specialty, email } =
-      await request.json();
-    const updatedDoctor = await prisma.doctors.update({
-      where: { doctor_id: Number(id) },
-      data: { first_name, last_name, specialty, email },
-    });
-    return NextResponse.json(updatedDoctor, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to update doctor" },
-      { status: 500 }
-    );
-  }
-}
+    const result = await prisma.doctors.deleteMany({});
 
-// DELETE: Remove a doctor by id
-export async function DELETE(request: Request) {
-  try {
-    const { id } = await request.json();
-    await prisma.doctors.delete({
-      where: { doctor_id: Number(id) },
+    return NextResponse.json({
+      message: "All doctors deleted successfully",
+      count: result.count,
     });
-    return NextResponse.json({}, { status: 204 }); // No Content
   } catch (error) {
+    console.error("Error deleting all doctors:", error);
     return NextResponse.json(
-      { error: "Failed to delete doctor" },
+      { error: "Failed to delete all doctors" },
       { status: 500 }
     );
   }

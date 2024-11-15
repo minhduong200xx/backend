@@ -4,8 +4,8 @@ generator client {
  
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url = env("POSTGRES_PRISMA_URL") 
+  directUrl = env("POSTGRES_URL_NON_POOLING") //
 }
 
 model Suppliers {
@@ -19,33 +19,62 @@ model Suppliers {
 }
 
 
+model User {
+  user_id    Int       @id @default(autoincrement())  @unique
+  first_name String?
+  last_name  String?
+  user_name  String
+  email      String    @unique
+  password   String
+  role       Role      @relation(fields: [role_id], references: [role_id])
+  role_id    Int       @default(2)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  patient    Patients? 
+  doctor     Doctors?
+  status     Boolean @default(true)  
+}
+
+model Role {
+  role_id   Int    @id @default(autoincrement())
+  role_name String @unique
+  users     User[]
+  
+}
+
 model Patients {
   patient_id        Int              @id @default(autoincrement())
+  user_id           Int              @unique
   first_name        String
   last_name         String
   date_of_birth     DateTime?
+  email             String?
   gender            String?
   phone_number      String?
-  email             String?
   address           String?
   emergency_contact String?
   medical_history   String?
   appointments      Appointments[]
   medical_records   Medical_Records[]
+  user              User             @relation(fields: [user_id], references: [user_id])
 }
-
 
 model Doctors {
   doctor_id        Int              @id @default(autoincrement())
-  first_name       String
+  user_id          Int              @unique
+  first_name       String           
   last_name        String
   specialty        String?
-  phone_number     String?
-  email            String?
+  date_of_birth     DateTime?
+  email             String?
+  gender            String?
+  phone_number      String?
+  address           String?
   experience_years Int?
   working_days     String?
   appointments     Appointments[]
   medical_records  Medical_Records[]
+  user             User             @relation(fields: [user_id], references: [user_id])
 }
 
 
@@ -63,8 +92,8 @@ model Appointments {
   status            String    @default("Scheduled")
   patient_id        Int
   doctor_id         Int
-  patient           Patients  @relation(fields: [patient_id], references: [patient_id])
-  doctor            Doctors   @relation(fields: [doctor_id], references: [doctor_id])
+  patient           Patients  @relation(fields: [patient_id], references: [patient_id], onDelete: Cascade)
+  doctor            Doctors   @relation(fields: [doctor_id], references: [doctor_id], onDelete: Cascade)
   payments          Payments[]
 }
 
@@ -75,8 +104,8 @@ model Medical_Records {
   record_date DateTime   @default(now())
   patient_id  Int
   doctor_id   Int
-  patient     Patients   @relation(fields: [patient_id], references: [patient_id])
-  doctor      Doctors    @relation(fields: [doctor_id], references: [doctor_id])
+  patient     Patients   @relation(fields: [patient_id], references: [patient_id],onDelete: Cascade)
+  doctor      Doctors    @relation(fields: [doctor_id], references: [doctor_id], onDelete: Cascade)
   prescriptions Prescriptions[]
 }
 
@@ -86,7 +115,7 @@ model Prescriptions {
   dosage          String?
   duration        String?
   record_id       Int
-  record          Medical_Records      @relation(fields: [record_id], references: [record_id])
+  record          Medical_Records      @relation(fields: [record_id], references: [record_id], onDelete: Cascade)
   prescription_medicines Prescriptions_Medicines[]
 }
 
@@ -96,7 +125,7 @@ model Payments {
   amount          Float
   payment_method  String    @default("Cash")
   appointment_id  Int
-  appointment     Appointments @relation(fields: [appointment_id], references: [appointment_id])
+  appointment     Appointments @relation(fields: [appointment_id], references: [appointment_id], onDelete: Cascade)
 }
 
 
@@ -108,7 +137,7 @@ model Medicines {
   price_per_unit    Float
   expiration_date   DateTime?
   supplier_id       Int
-  supplier          Suppliers              @relation(fields: [supplier_id], references: [supplier_id])
+  supplier          Suppliers              @relation(fields: [supplier_id], references: [supplier_id],onDelete: Cascade)
   stock_transactions Stock_Transactions[]
   prescription_medicines Prescriptions_Medicines[]
 }
@@ -121,7 +150,7 @@ model Stock_Transactions {
   quantity         Int
   notes            String?
   medicine_id      Int
-  medicine         Medicines @relation(fields: [medicine_id], references: [medicine_id])
+  medicine         Medicines @relation(fields: [medicine_id], references: [medicine_id],onDelete: Cascade)
 }
 
 
@@ -129,8 +158,8 @@ model Prescriptions_Medicines {
   prescription_id Int
   medicine_id     Int
   quantity        Int
-  prescription    Prescriptions @relation(fields: [prescription_id], references: [prescription_id])
-  medicine        Medicines     @relation(fields: [medicine_id], references: [medicine_id])
+  prescription    Prescriptions @relation(fields: [prescription_id], references: [prescription_id],onDelete: Cascade)
+  medicine        Medicines     @relation(fields: [medicine_id], references: [medicine_id],onDelete: Cascade)
   
   @@id([prescription_id, medicine_id])
 }
