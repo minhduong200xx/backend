@@ -65,6 +65,10 @@ export async function PUT(
   try {
     const data = await request.json();
 
+    if (data.date_of_birth) {
+      data.date_of_birth = new Date(data.date_of_birth).toISOString();
+    }
+
     const updatedDoctor = await prisma.doctors.update({
       where: { doctor_id: Number(params.id) },
       data,
@@ -72,7 +76,6 @@ export async function PUT(
 
     return NextResponse.json(updatedDoctor);
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       { error: "Failed to update doctor" },
       { status: 500 }

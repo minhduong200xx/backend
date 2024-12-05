@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     // Get tokens from cookies
-    const accessToken = req.cookies.get("token");
+    const accessToken = req.cookies.get("accessToken");
     const refreshToken = req.cookies.get("refreshToken");
 
     if (!accessToken && !refreshToken) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       message: "Logged out successfully.",
     });
 
-    response.cookies.set("token", "", {
+    response.cookies.set("accessToken", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

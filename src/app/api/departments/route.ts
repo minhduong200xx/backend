@@ -9,7 +9,6 @@ export async function GET() {
     const departments = await prisma.departments.findMany();
     return NextResponse.json(departments);
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       { message: "Error fetching departments." },
       { status: 500 }
@@ -26,7 +25,6 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json(newDepartment, { status: 201 });
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       { message: "Error creating department." },
       { status: 500 }
@@ -40,7 +38,6 @@ export async function DELETE() {
     await prisma.departments.deleteMany({});
     return NextResponse.json({ message: "All departments deleted." });
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       { message: "Error deleting departments." },
       { status: 500 }

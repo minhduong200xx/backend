@@ -2,12 +2,19 @@ import { PrismaClient } from "@prisma/client";
 import { getSession } from "next-auth/react";
 
 const prisma = new PrismaClient();
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { userId } = await req.json();
+    const token = req.cookies.get("accessToken")?.value;
 
+    if (!token) {
+      return NextResponse.json(
+        { message: "You are not logged in." },
+        { status: 401 }
+      );
+    }
     if (!userId) {
       return NextResponse.json(
         {

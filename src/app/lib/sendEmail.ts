@@ -1,33 +1,23 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 export default async function sendEmail({
   to,
   subject,
-  text,
+  content,
 }: {
   to: string;
   subject: string;
-  text: string;
+  content: string;
 }) {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.EMAIL_USERNAME, // Add this to your environment variables
-        pass: process.env.EMAIL_PASSWORD, // Add this to your environment variables
-      },
-    });
+  const resend = new Resend("re_XUwa4jJ9_2gX5exCK7ZPyCm9FpVTNsVB3");
 
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_USERNAME,
-      to,
-      subject,
-      text,
-    });
-
-    return { success: true, info };
-  } catch (error) {
-    console.error("Email sending error:", error);
-    return { success: false, error };
-  }
+  resend.emails.send({
+    from: "Eclinic@resend.dev",
+    to: to,
+    subject: subject,
+    html: `<h1>${subject}</h1>
+    <p>
+       ${content}
+    </p>`,
+  });
 }

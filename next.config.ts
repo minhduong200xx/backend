@@ -1,7 +1,19 @@
 import type { NextConfig } from "next";
+import withAntdLess from "next-plugin-antd-less"; // Ensure the correct import
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  reactStrictMode: true,
 };
 
-export default nextConfig;
+
+
+export default withAntdLess({
+  ...nextConfig,
+  lessOptions: {
+    modifyVars: {
+      "@primary-color": "#1DA57A",
+    },
+    javascriptEnabled: true,
+  },
+ 
+});
