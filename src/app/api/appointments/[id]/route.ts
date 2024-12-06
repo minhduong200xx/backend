@@ -3,30 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const appointment = await prisma.appointments.findUnique({
-      where: { appointment_id: Number(params.id) },
-    });
-    if (!appointment) {
-      return NextResponse.json(
-        { message: "Appointment not found." },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json(appointment);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: "Error fetching appointment." },
-      { status: 500 }
-    );
-  }
-}
-
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
