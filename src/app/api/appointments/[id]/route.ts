@@ -6,11 +6,12 @@ const prisma = new PrismaClient();
 // Get appointment by ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   try {
+    const { id } = context.params;
     const appointment = await prisma.appointments.findUnique({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: Number(id) },
       include: {
         patient: true,
         doctor: true,
@@ -35,12 +36,13 @@ export async function GET(
 // Update appointment by ID
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   const data = await req.json();
   try {
+    const { id } = context.params;
     const appointment = await prisma.appointments.findUnique({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: Number(id) },
       include: {
         patient: true,
         doctor: true,
@@ -53,7 +55,7 @@ export async function PUT(
       );
     }
     const updatedAppointment = await prisma.appointments.update({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: Number(id) },
       data,
     });
     return NextResponse.json(updatedAppointment);
@@ -69,11 +71,12 @@ export async function PUT(
 // Delete appointment by ID
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   try {
+    const { id } = context.params;
     const appointment = await prisma.appointments.findUnique({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: Number(id) },
       include: {
         patient: true,
         doctor: true,
@@ -86,7 +89,7 @@ export async function DELETE(
       );
     }
     const deletedAppointment = await prisma.appointments.delete({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: Number(id) },
     });
     return NextResponse.json(deletedAppointment);
   } catch (error) {
