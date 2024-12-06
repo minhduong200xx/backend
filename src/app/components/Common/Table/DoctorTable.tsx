@@ -59,6 +59,7 @@ const DoctorTable: React.FC = () => {
     } else {
       await axios.post("/api/doctors", restValues);
     }
+    console.log(age);
     setIsModalVisible(false);
     fetchDoctors();
   };

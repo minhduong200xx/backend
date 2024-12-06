@@ -1,27 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Table, Modal, Button, Input } from "antd";
+import { Table, Button, Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import useDebounce from "@/app/hooks/useDebounce";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import PatientProfileModal from "../Modal/PatientProfileModal";
+import { Patient } from "@/app/types/type";
 
 const { Search } = Input;
-
-interface Patient {
-  patientId: string;
-  userId: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  email: string;
-  phone: string;
-  gender?: string;
-  address?: string;
-  emergencyContact?: string;
-  medicalHistory?: string;
-  appointments?: string[];
-}
 
 const columns: ColumnsType<Patient> = [
   {
@@ -112,12 +98,12 @@ const initialData: Patient[] = [
   // Add more patient data here
 ];
 
-const handleEdit = (record: any) => {
+const handleEdit = (record: Patient) => {
   console.log("Edit", record);
   // Implement edit logic here
 };
 
-const handleDelete = (record: any) => {
+const handleDelete = (record: Patient) => {
   console.log("Delete", record);
   // Implement delete logic here
 };

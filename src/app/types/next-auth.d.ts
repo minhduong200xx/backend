@@ -1,5 +1,3 @@
-import NextAuth from "next-auth";
-
 declare module "next-auth" {
   interface User {
     role_id?: string; // Add your custom property here

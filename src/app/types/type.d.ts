@@ -14,3 +14,34 @@ export interface Doctor {
   appointments?: string[];
   medical_records?: string[];
 }
+
+export interface Department {
+  department_id: number;
+  department_name: string;
+  description?: string;
+}
+export interface User {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  status: boolean;
+}
+export interface Patient {
+  patientId: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  email: string;
+  phone: string;
+  gender?: string;
+  address?: string;
+  emergencyContact?: string;
+  medicalHistory?: string;
+  appointments?: string[];
+}

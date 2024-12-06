@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
-import sendEmail from "@/app/lib/sendEmail";
 import { PrismaClient } from "@prisma/client";
 // import { getServerSession } from "next-auth";
 // import { authOptions } from "../../auth/[...nextauth]/route";
@@ -93,7 +92,11 @@ export async function POST(req: NextRequest) {
         </p>`,
       });
       return NextResponse.json(
-        { message: "User created successfully and email sent", user: newUser },
+        {
+          message: "User created successfully and email sent",
+          user: newUser,
+          data,
+        },
         { status: 201 }
       );
     } catch (error) {

@@ -1,14 +1,14 @@
 // src/components/DepartmentsModal.tsx
 import React, { useEffect } from "react";
-import { Modal, Form, Input, Row, Col, Button } from "antd";
-// Adjust the import path as needed
+import { Modal, Form, Input, Row, Col, Button, FormInstance } from "antd";
+import { Department } from "@/app/types/type";
 
 interface DepartmentsModalProps {
   open: boolean;
   onClose: () => void;
-  selectedDepartment: any | null;
-  onSave: (updatedDepartment: any) => void;
-  form: any;
+  selectedDepartment: Department | null;
+  onSave: (updatedDepartment: Department) => void;
+  form: FormInstance;
 }
 
 const DepartmentsModal: React.FC<DepartmentsModalProps> = ({
@@ -28,7 +28,7 @@ const DepartmentsModal: React.FC<DepartmentsModalProps> = ({
 
   const handleSave = () => {
     form.validateFields().then((values) => {
-      onSave(values as any);
+      onSave(values as Department);
       onClose();
       return values;
     });

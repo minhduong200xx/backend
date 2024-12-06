@@ -7,14 +7,9 @@ import axios from "axios";
 import type { ColumnsType } from "antd/es/table";
 import useDebounce from "@/app/hooks/useDebounce";
 import DepartmentsModal from "../Modal/DepartmentsModal";
+import { Department } from "@/app/types/type";
 
 const { Search } = Input;
-
-interface Department {
-  department_id: number;
-  department_name: string;
-  description?: string;
-}
 
 const DepartmentsTable: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -114,7 +109,7 @@ const DepartmentsTable: React.FC = () => {
       return matchesSearchText;
     });
     setDepartments(filteredData);
-  }, [debouncedSearchText]);
+  }, [debouncedSearchText, departments]);
 
   return (
     <div>

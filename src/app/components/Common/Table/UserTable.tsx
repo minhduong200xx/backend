@@ -2,21 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown, Input, Menu, Select, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { DeleteOutlined, DownOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import useDebounce from "@/app/hooks/useDebounce";
+import { User } from "@/app/types/type";
 const { Search } = Input;
 const { Option } = Select;
-interface User {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-  status: boolean;
-}
 
 const columns: ColumnsType<User> = [
   {
@@ -63,20 +53,20 @@ const columns: ColumnsType<User> = [
     title: "Status",
     dataIndex: "status",
     key: "status",
-    render: (status: string) => (
+    render: (record: User) => (
       <Dropdown
         overlay={
           <Menu>
             <Menu.Item key="1">
               <span
-                onClick={() => handleChangeStatus(status)}
+                onClick={() => handleChangeStatus(record)}
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  color: status ? "red" : "green",
+                  color: record.status ? "red" : "green",
                 }}
               >
-                {status ? "Inactive" : "Active"}
+                {record.status ? "Inactive" : "Active"}
               </span>
             </Menu.Item>
           </Menu>
@@ -95,7 +85,7 @@ const columns: ColumnsType<User> = [
   {
     title: "Actions",
     key: "actions",
-    render: (text: any, record: any) => (
+    render: (record: User) => (
       <div className="flex flex-row gap-1">
         <Button type="link" onClick={() => handleEdit(record)}>
           <EditOutlined />
@@ -331,7 +321,7 @@ const initialData: User[] = [
     status: false,
   },
 ];
-const handleChangeStatus = (record: any) => {
+const handleChangeStatus = (record: User) => {
   console.log("Change Status", record);
   // Implement change status logic here
   const updatedData = initialData.map((user) => {
@@ -344,17 +334,12 @@ const handleChangeStatus = (record: any) => {
   // You might want to update the state or make an API call here to persist the changes
 };
 
-const handleView = (record: any) => {
-  console.log("View", record);
-  // Implement view logic here
-};
-
-const handleEdit = (record: any) => {
+const handleEdit = (record: User) => {
   console.log("Edit", record);
   // Implement edit logic here
 };
 
-const handleDelete = (record: any) => {
+const handleDelete = (record: User) => {
   console.log("Delete", record);
   // Implement delete logic here
 };

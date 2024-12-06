@@ -10,7 +10,7 @@ export async function GET() {
     return NextResponse.json(departments);
   } catch (error) {
     return NextResponse.json(
-      { message: "Error fetching departments." },
+      { message: "Error fetching departments.", error },
       { status: 500 }
     );
   }
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newDepartment, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error creating department." },
+      { message: "Error creating department.", error },
       { status: 500 }
     );
   }
@@ -39,7 +39,7 @@ export async function DELETE() {
     return NextResponse.json({ message: "All departments deleted." });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error deleting departments." },
+      { message: "Error deleting departments.", error },
       { status: 500 }
     );
   }
