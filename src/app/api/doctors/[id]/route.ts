@@ -77,7 +77,7 @@ export async function PUT(
     return NextResponse.json(updatedDoctor);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to update doctor", error },
+      { error: "Failed to update doctor", message: error },
       { status: 500 }
     );
   }
