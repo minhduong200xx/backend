@@ -55,7 +55,17 @@ export async function PUT(
       return NextResponse.json({ error: "Patient not found" }, { status: 404 });
     }
 
-    const updatedData: any = {};
+    const updatedData: Partial<{
+      first_name: string;
+      last_name: string;
+      date_of_birth: string;
+      gender: string;
+      phone_number: string;
+      email: string;
+      address: string;
+      emergency_contact: string;
+      medical_history: string;
+    }> = {};
 
     if (patient.first_name !== first_name) updatedData.first_name = first_name;
     if (patient.last_name !== last_name) updatedData.last_name = last_name;

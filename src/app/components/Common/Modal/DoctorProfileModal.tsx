@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, Row, Col } from "antd";
+import { Modal, Button, Form, Input, Row, Col, FormInstance } from "antd";
 import { Doctor } from "@/app/types/type";
 
 interface DoctorProfileModalProps {
@@ -8,7 +8,7 @@ interface DoctorProfileModalProps {
   onClose: () => void;
   selectedDoctor: Doctor | null;
   onSave: (updatedDoctor: Doctor) => void;
-  form: any;
+  form: FormInstance;
 }
 
 const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({

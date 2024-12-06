@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Col, Row } from "antd";
+import { Patient } from "@/app/types/type";
 interface PatientProfileModalProps {
   visible: boolean;
   onClose: () => void;
-  selectedPatient: any | null;
-  onSave: (updatedPatient: any) => void;
+  selectedPatient: Patient | null;
+  onSave: (updatedPatient: Patient) => void;
 }
 
 const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
@@ -20,11 +21,12 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
     if (selectedPatient) {
       form.setFieldsValue(selectedPatient);
     }
+    calculateAge(selectedPatient?.dateOfBirth || "");
   }, [selectedPatient, form]);
 
   const handleSave = () => {
     form.validateFields().then((values) => {
-      onSave(values as any);
+      onSave(values as Patient);
       setIsEditing(false);
       console.log(values);
     });
