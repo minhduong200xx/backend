@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-//get appointment by ID
+// Get appointment by ID
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -32,26 +32,26 @@ export async function GET(
   }
 }
 
-//update appointment by ID
+// Update appointment by ID
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const data = await req.json();
-  const appointment = await prisma.appointments.findUnique({
-    where: { appointment_id: Number(params.id) },
-    include: {
-      patient: true,
-      doctor: true,
-    },
-  });
-  if (!appointment) {
-    return NextResponse.json(
-      { message: "Appointment not found." },
-      { status: 404 }
-    );
-  }
   try {
+    const appointment = await prisma.appointments.findUnique({
+      where: { appointment_id: Number(params.id) },
+      include: {
+        patient: true,
+        doctor: true,
+      },
+    });
+    if (!appointment) {
+      return NextResponse.json(
+        { message: "Appointment not found." },
+        { status: 404 }
+      );
+    }
     const updatedAppointment = await prisma.appointments.update({
       where: { appointment_id: Number(params.id) },
       data,
