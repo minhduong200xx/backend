@@ -1,29 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-// Get appointment by ID
 export async function GET(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const appointment = await prisma.appointments.findUnique({
       where: { appointment_id: Number(params.id) },
-      include: {
-        patient: true,
-        doctor: true,
-      },
     });
-    const data = await req.json();
     if (!appointment) {
       return NextResponse.json(
-        { message: "Appointment not found.", data },
+        { message: "Appointment not found." },
         { status: 404 }
       );
     }
-
     return NextResponse.json(appointment);
   } catch (error) {
     console.error(error);
@@ -34,34 +27,25 @@ export async function GET(
   }
 }
 
-// Update appointment by ID
 export async function PUT(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const data = await req.json();
-
   try {
+    const data = await request.json();
     const appointment = await prisma.appointments.findUnique({
       where: { appointment_id: Number(params.id) },
-      include: {
-        patient: true,
-        doctor: true,
-      },
     });
-
     if (!appointment) {
       return NextResponse.json(
         { message: "Appointment not found." },
         { status: 404 }
       );
     }
-
     const updatedAppointment = await prisma.appointments.update({
       where: { appointment_id: Number(params.id) },
       data,
     });
-
     return NextResponse.json(updatedAppointment);
   } catch (error) {
     console.error(error);
@@ -72,32 +56,24 @@ export async function PUT(
   }
 }
 
-// Delete appointment by ID
 export async function DELETE(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const appointment = await prisma.appointments.findUnique({
       where: { appointment_id: Number(params.id) },
-      include: {
-        patient: true,
-        doctor: true,
-      },
     });
-
     if (!appointment) {
       return NextResponse.json(
         { message: "Appointment not found." },
         { status: 404 }
       );
     }
-
-    const deletedAppointment = await prisma.appointments.delete({
+    await prisma.appointments.delete({
       where: { appointment_id: Number(params.id) },
     });
-
-    return NextResponse.json(deletedAppointment);
+    return NextResponse.json({ message: "Appointment deleted" });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
