@@ -13,6 +13,7 @@ const { Option } = Select;
 
 const DoctorTable: React.FC = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   const [form] = Form.useForm();
@@ -32,6 +33,7 @@ const DoctorTable: React.FC = () => {
   const fetchDoctors = async () => {
     const response = await axios.get("/api/doctors");
     setDoctors(response.data);
+    setFilteredDoctors(response.data);
   };
 
   const handleAdd = () => {
@@ -59,16 +61,37 @@ const DoctorTable: React.FC = () => {
     } else {
       await axios.post("/api/doctors", restValues);
     }
-    console.log(age);
     setIsModalVisible(false);
     fetchDoctors();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    fetchDoctors();
     form.resetFields();
   };
+
+  useEffect(() => {
+    const filteredData = doctors.filter((doctor) => {
+      const matchesSearchText =
+        doctor.first_name
+          .toLowerCase()
+          .includes(debouncedSearchText.toLowerCase()) ||
+        doctor.last_name
+          .toLowerCase()
+          .includes(debouncedSearchText.toLowerCase()) ||
+        doctor.email?.toLowerCase().includes(debouncedSearchText.toLowerCase());
+
+      const matchesSpecialty = specialtyFilter
+        ? doctor.specialty === specialtyFilter
+        : true;
+      const matchesExperience = experienceFilter
+        ? doctor.experience_years! >= experienceFilter
+        : true;
+
+      return matchesSearchText && matchesSpecialty && matchesExperience;
+    });
+    setFilteredDoctors(filteredData);
+  }, [debouncedSearchText, specialtyFilter, experienceFilter, doctors]);
 
   const columns: ColumnsType<Doctor> = [
     {
@@ -131,29 +154,6 @@ const DoctorTable: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    const filteredData = doctors.filter((doctor) => {
-      const matchesSearchText =
-        doctor.first_name
-          .toLowerCase()
-          .includes(debouncedSearchText.toLowerCase()) ||
-        doctor.last_name
-          .toLowerCase()
-          .includes(debouncedSearchText.toLowerCase()) ||
-        doctor.email?.toLowerCase().includes(debouncedSearchText.toLowerCase());
-
-      const matchesSpecialty = specialtyFilter
-        ? doctor.specialty === specialtyFilter
-        : true;
-      const matchesExperience = experienceFilter
-        ? doctor.experience_years! >= experienceFilter
-        : true;
-
-      return matchesSearchText && matchesSpecialty && matchesExperience;
-    });
-    setDoctors(filteredData);
-  }, [debouncedSearchText, specialtyFilter, experienceFilter]);
-
   return (
     <div>
       <div className="flex justify-between">
@@ -162,19 +162,23 @@ const DoctorTable: React.FC = () => {
             placeholder="Filter by Specialty"
             onChange={(value) => setSpecialtyFilter(value)}
             allowClear
-            style={{ width: "fit-content" }}
+            style={{ width: 150 }}
           >
-            <Option value="Cardiology">Cardiology</Option>
-            <Option value="Dermatology">Dermatology</Option>
-            <Option value="Neurology">Neurology</Option>
-            <Option value="Pediatrics">Pediatrics</Option>
+            {Array.from(new Set(doctors.map((doctor) => doctor.specialty))).map(
+              (specialty) => (
+                <Option key={specialty} value={specialty}>
+                  {specialty}
+                </Option>
+              )
+            )}
           </Select>
 
           <Select
             placeholder="Filter by Experience Years"
             onChange={(value) => setExperienceFilter(value)}
             allowClear
-            style={{ width: "fit-content" }}
+            style={{ width: 200 }}
+            disabled={doctors.length === 0}
           >
             <Option value={5}>More than 5 years</Option>
             <Option value={10}>More than 10 years</Option>
@@ -193,7 +197,7 @@ const DoctorTable: React.FC = () => {
       </div>
       <Table
         columns={columns}
-        dataSource={doctors}
+        dataSource={filteredDoctors}
         rowKey="doctor_id"
         pagination={{ pageSize: 6 }}
         loading={doctors.length === 0}

@@ -5,8 +5,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 };
 
-
-
 export default withAntdLess({
   ...nextConfig,
   lessOptions: {
@@ -15,5 +13,4 @@ export default withAntdLess({
     },
     javascriptEnabled: true,
   },
- 
 });

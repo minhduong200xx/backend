@@ -1,9 +1,11 @@
+"use client";
 import localFont from "next/font/local";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import "./globals.css";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Loading from "./loading";
+import { AuthProvider } from "./context/AuthProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,9 +28,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Suspense fallback={<Loading />}>
-          <AntdRegistry>{children}</AntdRegistry>
-        </Suspense>
+        <AuthProvider>
+          <Suspense fallback={<Loading />}>
+            <AntdRegistry>{children}</AntdRegistry>
+          </Suspense>
+        </AuthProvider>
       </body>
     </html>
   );

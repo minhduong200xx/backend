@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect } from "react";
-import DashboardLayout from "../components/Common/Dashboard/DashboardLayout";
+import DashboardLayout from "../components/Common/Layout/DashboardLayout";
 
 export default function Error({
   error,
@@ -17,7 +17,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <DashboardLayout>
+    <div>
       <h2 className="text-center text-red-500">Something went wrong!</h2>
       {error.digest && (
         <p className="text-center text-gray-500">{error.digest}</p>
@@ -31,6 +31,6 @@ export default function Error({
       >
         Try again
       </button>
-    </DashboardLayout>
+    </div>
   );
 }

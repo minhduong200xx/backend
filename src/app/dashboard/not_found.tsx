@@ -1,5 +1,5 @@
 import Link from "next/link";
-import DashboardLayout from "../components/Common/Dashboard/DashboardLayout";
+import DashboardLayout from "../components/Common/Layout/DashboardLayout";
 
 export default function NotFound() {
   return (

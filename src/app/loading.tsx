@@ -1,4 +1,10 @@
+import { Flex, Spin } from "antd";
+
 export default function Loading() {
   // Or a custom loading skeleton component
-  return <p>Loading...</p>;
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <Spin size="large" />
+    </div>
+  );
 }

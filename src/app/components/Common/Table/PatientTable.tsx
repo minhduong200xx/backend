@@ -12,28 +12,28 @@ const { Search } = Input;
 const columns: ColumnsType<Patient> = [
   {
     title: "Patient ID",
-    dataIndex: "patientId",
-    key: "patientId",
+    dataIndex: "patient_id",
+    key: "patient_id",
   },
   {
     title: "User ID",
-    dataIndex: "userId",
-    key: "userId",
+    dataIndex: "user_id",
+    key: "user_id",
   },
   {
     title: "First Name",
-    dataIndex: "firstName",
-    key: "firstName",
+    dataIndex: "first_name",
+    key: "first_name",
   },
   {
     title: "Last Name",
-    dataIndex: "lastName",
-    key: "lastName",
+    dataIndex: "last_name",
+    key: "last_name",
   },
   {
     title: "Date of Birth",
-    dataIndex: "dateOfBirth",
-    key: "dateOfBirth",
+    dataIndex: "date_of_birth",
+    key: "date_of_birth",
   },
   {
     title: "Email",
@@ -42,8 +42,8 @@ const columns: ColumnsType<Patient> = [
   },
   {
     title: "Phone",
-    dataIndex: "phone",
-    key: "phone",
+    dataIndex: "phone_number",
+    key: "phone_number",
   },
   {
     title: "Gender",
@@ -68,31 +68,31 @@ const columns: ColumnsType<Patient> = [
 
 const initialData: Patient[] = [
   {
-    patientId: "1",
-    userId: "1",
-    firstName: "John",
-    lastName: "Doe",
-    dateOfBirth: "1990-01-01",
+    patient_id: 1,
+    user_id: 1,
+    first_name: "John",
+    last_name: "Doe",
+    date_of_birth: "1990-01-01",
     email: "john.doe@example.com",
-    phone: "123-456-7890",
+    phone_number: "123-456-7890",
     gender: "Male",
     address: "123 Main St, Anytown, USA",
-    emergencyContact: "Jane Doe - 987-654-3210",
-    medicalHistory: "No known allergies. Previous surgery in 2015.",
+    emergency_contact: "Jane Doe - 987-654-3210",
+    medical_history: "No known allergies. Previous surgery in 2015.",
     appointments: ["2023-01-01", "2023-02-01"],
   },
   {
-    patientId: "2",
-    userId: "2",
-    firstName: "Jane",
-    lastName: "Smith",
-    dateOfBirth: "1985-05-15",
+    patient_id: 2,
+    user_id: 2,
+    first_name: "Jane",
+    last_name: "Smith",
+    date_of_birth: "1985-05-15",
     email: "jane.smith@example.com",
-    phone: "987-654-3210",
+    phone_number: "987-654-3210",
     gender: "Female",
     address: "456 Elm St, Othertown, USA",
-    emergencyContact: "John Smith - 123-456-7890",
-    medicalHistory: "Allergic to penicillin. Asthma.",
+    emergency_contact: "John Smith - 123-456-7890",
+    medical_history: "Allergic to penicillin. Asthma.",
     appointments: ["2023-03-01", "2023-04-01"],
   },
   // Add more patient data here
@@ -117,13 +117,15 @@ const PatientTable: React.FC = () => {
   useEffect(() => {
     const filteredData = initialData.filter((patient) => {
       const matchesSearchText =
-        patient.firstName
+        patient.first_name
           .toLowerCase()
           .includes(debouncedSearchText.toLowerCase()) ||
-        patient.lastName
+        patient.last_name
           .toLowerCase()
           .includes(debouncedSearchText.toLowerCase()) ||
-        patient.email.toLowerCase().includes(debouncedSearchText.toLowerCase());
+        (patient.email ?? "")
+          .toLowerCase()
+          .includes(debouncedSearchText.toLowerCase());
 
       return matchesSearchText;
     });
@@ -156,14 +158,14 @@ const PatientTable: React.FC = () => {
       <Table
         columns={columns}
         dataSource={data}
-        rowKey="patientId"
+        rowKey="patient_id"
         onRow={(record) => ({
           onClick: () => handleRowClick(record),
         })}
         pagination={{ pageSize: 6 }}
       />
       <PatientProfileModal
-        visible={!!selectedPatient}
+        open={!!selectedPatient}
         selectedPatient={selectedPatient}
         onClose={handleCloseModal}
         onSave={(updatedPatient) => {

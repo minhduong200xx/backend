@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useState, useEffect } from "react";
 import { Table, Button, Input, Form, Space } from "antd";
@@ -109,7 +110,7 @@ const DepartmentsTable: React.FC = () => {
       return matchesSearchText;
     });
     setDepartments(filteredData);
-  }, [debouncedSearchText, departments]);
+  }, [debouncedSearchText]);
 
   return (
     <div>
@@ -131,7 +132,6 @@ const DepartmentsTable: React.FC = () => {
         dataSource={departments}
         rowKey="department_id"
         pagination={{ pageSize: 6 }}
-        loading={departments.length === 0}
       />
       <DepartmentsModal
         open={isModalVisible}

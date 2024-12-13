@@ -1,15 +1,17 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Col, Row } from "antd";
 import { Patient } from "@/app/types/type";
+
 interface PatientProfileModalProps {
-  visible: boolean;
+  open: boolean;
   onClose: () => void;
   selectedPatient: Patient | null;
   onSave: (updatedPatient: Patient) => void;
 }
 
 const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
-  visible,
+  open,
   onClose,
   selectedPatient,
   onSave,
@@ -21,7 +23,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
     if (selectedPatient) {
       form.setFieldsValue(selectedPatient);
     }
-    calculateAge(selectedPatient?.dateOfBirth || "");
+    calculateAge(selectedPatient?.date_of_birth || "");
   }, [selectedPatient, form]);
 
   const handleSave = () => {
@@ -31,6 +33,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
       console.log(values);
     });
   };
+
   const calculateAge = (dateOfBirth: string) => {
     const birthDate = new Date(dateOfBirth);
     const today = new Date();
@@ -49,7 +52,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
   return (
     <Modal
       title="Patient Profile"
-      visible={visible}
+      open={open}
       onCancel={() => (onClose(), setIsEditing(false))}
       width={800}
       footer={[
@@ -71,7 +74,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Col span={12}>
               <Form.Item
                 label="Patient ID"
-                name="patientId"
+                name="patient_id"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
@@ -81,7 +84,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Col span={12}>
               <Form.Item
                 label="User ID"
-                name="userId"
+                name="user_id"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
@@ -93,7 +96,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Col span={12}>
               <Form.Item
                 label="First Name"
-                name="firstName"
+                name="first_name"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
@@ -103,7 +106,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Col span={12}>
               <Form.Item
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
@@ -125,7 +128,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Col span={12}>
               <Form.Item
                 label="Phone"
-                name="phone"
+                name="phone_number"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
@@ -137,7 +140,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Col span={12}>
               <Form.Item
                 label="Date of Birth"
-                name="dateOfBirth"
+                name="date_of_birth"
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
               >
@@ -172,8 +175,8 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
             <Input disabled={!isEditing} style={{ color: "black" }} />
           </Form.Item>
           <Form.Item
-            label="Emerg-Contact"
-            name="emergencyContact"
+            label="Emergency Contact"
+            name="emergency_contact"
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 20 }}
           >
@@ -181,7 +184,7 @@ const PatientProfileModal: React.FC<PatientProfileModalProps> = ({
           </Form.Item>
           <Form.Item
             label="Medical History"
-            name="medicalHistory"
+            name="medical_history"
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 20 }}
           >

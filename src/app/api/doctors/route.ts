@@ -7,7 +7,13 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const doctors = await prisma.doctors.findMany();
-    return NextResponse.json(doctors);
+    const formattedDoctors = doctors.map((doctor) => ({
+      ...doctor,
+      date_of_birth: doctor.date_of_birth
+        ? doctor.date_of_birth.toISOString().split("T")[0]
+        : null,
+    }));
+    return NextResponse.json(formattedDoctors);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

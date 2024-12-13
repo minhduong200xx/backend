@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function verifySession(req: NextRequest) {
+export async function verifySection(req: NextRequest) {
   const JWT_SECRET = process.env.JWT_SECRET as string;
   try {
     // Get the token from cookies
@@ -20,7 +20,7 @@ export async function verifySession(req: NextRequest) {
     // If the token is valid, return the decoded payload
     return { isValid: true, user: decoded };
   } catch (error) {
-    console.error("Session verification failed:", error);
+    console.error("Section verification failed:", error);
     return { isValid: false, message: "Invalid or expired token" };
   }
 }

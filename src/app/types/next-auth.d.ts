@@ -1,9 +1,10 @@
+import NextAuth from "next-auth";
 declare module "next-auth" {
   interface User {
-    role_id?: string; // Add your custom property here
+    role_id?: number; // Add your custom property here
   }
 
-  interface Session {
+  interface Section {
     user: {
       name?: string | null;
       email?: string | null;

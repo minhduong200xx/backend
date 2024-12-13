@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
 
 const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
@@ -23,10 +22,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    const session = await getSession();
-    if (!session || session.user.role_id !== 1) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
-    }
+
     // Update user status in the database
     const updatedUser = await prisma.user.update({
       where: { user_id: userId },

@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    const savedToken = req.cookies.get("refreshToken");
+    const savedToken = req.cookies.get("accessToken");
     if (savedToken) {
       return NextResponse.json(
         { message: "You are already logged in." },
@@ -65,13 +65,14 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json({
       message: "Login successful.",
       accessToken,
+      user,
     });
     response.cookies.set("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 15 * 60, // 7 days
     });
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
-// import { getServerSession } from "next-auth";
+// import { getServerSection } from "next-auth";
 // import { authOptions } from "../../auth/[...nextauth]/route";
 import jwt from "jsonwebtoken";
 import { Resend } from "resend";

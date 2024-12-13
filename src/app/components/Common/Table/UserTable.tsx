@@ -1,33 +1,51 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Button, Dropdown, Input, Menu, Select, Table, Tag } from "antd";
+import { Button, Dropdown, Input, Menu, Select, Table, Tag, Space } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import useDebounce from "@/app/hooks/useDebounce";
 import { User } from "@/app/types/type";
+
 const { Search } = Input;
 const { Option } = Select;
 
+const roleMapping: { [key: number]: string } = {
+  1: "Admin",
+  2: "User",
+  3: "Doctor",
+  4: "Patient",
+};
+const handleChangeStatus = (record: User) => {
+  // Implement change status logic here
+};
+
+const handleEdit = (record: User) => {
+  console.log("Edit user:", record);
+};
+
+const handleDelete = (record: User) => {
+  // Implement delete logic here
+};
 const columns: ColumnsType<User> = [
   {
     title: "User ID",
-    dataIndex: "userId",
-    key: "userId",
+    dataIndex: "user_id",
+    key: "user_id",
   },
   {
     title: "First Name",
-    dataIndex: "firstName",
-    key: "firstName",
+    dataIndex: "first_name",
+    key: "first_name",
   },
   {
     title: "Last Name",
-    dataIndex: "lastName",
-    key: "lastName",
+    dataIndex: "last_name",
+    key: "last_name",
   },
   {
     title: "User Name",
-    dataIndex: "userName",
-    key: "userName",
+    dataIndex: "user_name",
+    key: "user_name",
   },
   {
     title: "Email",
@@ -36,24 +54,25 @@ const columns: ColumnsType<User> = [
   },
   {
     title: "Role",
-    dataIndex: "role",
+    dataIndex: "role_id",
     key: "role",
+    render: (role_id: number) => roleMapping[role_id],
   },
   {
     title: "Created At",
-    dataIndex: "createdAt",
-    key: "createdAt",
+    dataIndex: "created_at",
+    key: "created_at",
   },
   {
     title: "Updated At",
-    dataIndex: "updatedAt",
-    key: "updatedAt",
+    dataIndex: "updated_at",
+    key: "updated_at",
   },
   {
     title: "Status",
     dataIndex: "status",
     key: "status",
-    render: (record: User) => (
+    render: (status: boolean, record: User) => (
       <Dropdown
         overlay={
           <Menu>
@@ -63,10 +82,10 @@ const columns: ColumnsType<User> = [
                 style={{
                   textAlign: "center",
                   fontWeight: "bold",
-                  color: record.status ? "red" : "green",
+                  color: status ? "red" : "green",
                 }}
               >
-                {record.status ? "Inactive" : "Active"}
+                {status ? "Inactive" : "Active"}
               </span>
             </Menu.Item>
           </Menu>
@@ -100,253 +119,122 @@ const columns: ColumnsType<User> = [
 
 const initialData: User[] = [
   {
-    userId: "1",
-    firstName: "John",
-    lastName: "Doe",
-    userName: "johndoe",
+    user_id: 1,
+    first_name: "John",
+    last_name: "Doe",
+    user_name: "johndoe",
     email: "john.doe@example.com",
-    role: "Admin",
-    createdAt: "2023-01-01",
-    updatedAt: "2023-01-02",
+    role_id: 1,
+    created_at: "2023-01-01",
+    updated_at: "2023-01-02",
     status: true,
   },
   {
-    userId: "2",
-    firstName: "Joe",
-    lastName: "Doe",
-    userName: "johndoe",
-    email: "john.doe@example.com",
-    role: "Admin",
-    createdAt: "2023-01-01",
-    updatedAt: "2023-01-02",
+    user_id: 2,
+    first_name: "Joe",
+    last_name: "Doe",
+    user_name: "joedoe",
+    email: "joe.doe@example.com",
+    role_id: 1,
+    created_at: "2023-01-01",
+    updated_at: "2023-01-02",
     status: false,
   },
   // Add more user data here
   {
-    userId: "3",
-    firstName: "Jane",
-    lastName: "Smith",
-    userName: "janesmith",
+    user_id: 3,
+    first_name: "Jane",
+    last_name: "Smith",
+    user_name: "janesmith",
     email: "jane.smith@example.com",
-    role: "User",
-    createdAt: "2023-02-01",
-    updatedAt: "2023-02-02",
+    role_id: 2,
+    created_at: "2023-02-01",
+    updated_at: "2023-02-02",
     status: true,
   },
   {
-    userId: "4",
-    firstName: "Alice",
-    lastName: "Johnson",
-    userName: "alicejohnson",
+    user_id: 4,
+    first_name: "Alice",
+    last_name: "Johnson",
+    user_name: "alicejohnson",
     email: "alice.johnson@example.com",
-    role: "User",
-    createdAt: "2023-03-01",
-    updatedAt: "2023-03-02",
+    role_id: 2,
+    created_at: "2023-03-01",
+    updated_at: "2023-03-02",
     status: false,
   },
   {
-    userId: "5",
-    firstName: "Bob",
-    lastName: "Brown",
-    userName: "bobbrown",
+    user_id: 5,
+    first_name: "Bob",
+    last_name: "Brown",
+    user_name: "bobbrown",
     email: "bob.brown@example.com",
-    role: "Moderator",
-    createdAt: "2023-04-01",
-    updatedAt: "2023-04-02",
+    role_id: 3,
+    created_at: "2023-04-01",
+    updated_at: "2023-04-02",
     status: true,
   },
   {
-    userId: "6",
-    firstName: "Charlie",
-    lastName: "Davis",
-    userName: "charliedavis",
+    user_id: 6,
+    first_name: "Charlie",
+    last_name: "Davis",
+    user_name: "charliedavis",
     email: "charlie.davis@example.com",
-    role: "User",
-    createdAt: "2023-05-01",
-    updatedAt: "2023-05-02",
+    role_id: 2,
+    created_at: "2023-05-01",
+    updated_at: "2023-05-02",
     status: false,
   },
   {
-    userId: "7",
-    firstName: "Diana",
-    lastName: "Evans",
-    userName: "dianaevans",
+    user_id: 7,
+    first_name: "Diana",
+    last_name: "Evans",
+    user_name: "dianaevans",
     email: "diana.evans@example.com",
-    role: "Admin",
-    createdAt: "2023-06-01",
-    updatedAt: "2023-06-02",
+    role_id: 1,
+    created_at: "2023-06-01",
+    updated_at: "2023-06-02",
     status: true,
   },
   {
-    userId: "8",
-    firstName: "Eve",
-    lastName: "Foster",
-    userName: "evefoster",
+    user_id: 8,
+    first_name: "Eve",
+    last_name: "Foster",
+    user_name: "evefoster",
     email: "eve.foster@example.com",
-    role: "Moderator",
-    createdAt: "2023-07-01",
-    updatedAt: "2023-07-02",
+    role_id: 3,
+    created_at: "2023-07-01",
+    updated_at: "2023-07-02",
     status: true,
   },
   {
-    userId: "9",
-    firstName: "Frank",
-    lastName: "Green",
-    userName: "frankgreen",
+    user_id: 9,
+    first_name: "Frank",
+    last_name: "Green",
+    user_name: "frankgreen",
     email: "frank.green@example.com",
-    role: "User",
-    createdAt: "2023-08-01",
-    updatedAt: "2023-08-02",
+    role_id: 2,
+    created_at: "2023-08-01",
+    updated_at: "2023-08-02",
     status: false,
   },
   {
-    userId: "10",
-    firstName: "Grace",
-    lastName: "Harris",
-    userName: "graceharris",
+    user_id: 10,
+    first_name: "Grace",
+    last_name: "Harris",
+    user_name: "graceharris",
     email: "grace.harris@example.com",
-    role: "Admin",
-    createdAt: "2023-09-01",
-    updatedAt: "2023-09-02",
+    role_id: 1,
+    created_at: "2023-09-01",
+    updated_at: "2023-09-02",
     status: true,
-  },
-  {
-    userId: "11",
-    firstName: "Hank",
-    lastName: "Ivy",
-    userName: "hankivy",
-    email: "hank.ivy@example.com",
-    role: "User",
-    createdAt: "2023-10-01",
-    updatedAt: "2023-10-02",
-    status: true,
-  },
-  {
-    userId: "12",
-    firstName: "Ivy",
-    lastName: "Jones",
-    userName: "ivyjones",
-    email: "ivy.jones@example.com",
-    role: "Moderator",
-    createdAt: "2023-11-01",
-    updatedAt: "2023-11-02",
-    status: false,
-  },
-  {
-    userId: "13",
-    firstName: "Jack",
-    lastName: "King",
-    userName: "jackking",
-    email: "jack.king@example.com",
-    role: "Admin",
-    createdAt: "2023-12-01",
-    updatedAt: "2023-12-02",
-    status: true,
-  },
-  {
-    userId: "14",
-    firstName: "Karen",
-    lastName: "Lee",
-    userName: "karenlee",
-    email: "karen.lee@example.com",
-    role: "User",
-    createdAt: "2024-01-01",
-    updatedAt: "2024-01-02",
-    status: false,
-  },
-  {
-    userId: "15",
-    firstName: "Leo",
-    lastName: "Miller",
-    userName: "leomiller",
-    email: "leo.miller@example.com",
-    role: "Moderator",
-    createdAt: "2024-02-01",
-    updatedAt: "2024-02-02",
-    status: true,
-  },
-  {
-    userId: "16",
-    firstName: "Mia",
-    lastName: "Nelson",
-    userName: "mianelson",
-    email: "mia.nelson@example.com",
-    role: "Admin",
-    createdAt: "2024-03-01",
-    updatedAt: "2024-03-02",
-    status: false,
-  },
-  {
-    userId: "17",
-    firstName: "Nina",
-    lastName: "Olsen",
-    userName: "ninaolsen",
-    email: "nina.olsen@example.com",
-    role: "User",
-    createdAt: "2024-04-01",
-    updatedAt: "2024-04-02",
-    status: true,
-  },
-  {
-    userId: "18",
-    firstName: "Oscar",
-    lastName: "Parker",
-    userName: "oscarparker",
-    email: "oscar.parker@example.com",
-    role: "Moderator",
-    createdAt: "2024-05-01",
-    updatedAt: "2024-05-02",
-    status: false,
-  },
-  {
-    userId: "19",
-    firstName: "Paul",
-    lastName: "Quinn",
-    userName: "paulquinn",
-    email: "paul.quinn@example.com",
-    role: "Admin",
-    createdAt: "2024-06-01",
-    updatedAt: "2024-06-02",
-    status: true,
-  },
-  {
-    userId: "20",
-    firstName: "Quincy",
-    lastName: "Reed",
-    userName: "quincyreed",
-    email: "quincy.reed@example.com",
-    role: "User",
-    createdAt: "2024-07-01",
-    updatedAt: "2024-07-02",
-    status: false,
   },
 ];
-const handleChangeStatus = (record: User) => {
-  console.log("Change Status", record);
-  // Implement change status logic here
-  const updatedData = initialData.map((user) => {
-    if (user.userId === record.userId) {
-      return { ...user, status: !user.status };
-    }
-    return user;
-  });
-  console.log("Updated Data", updatedData);
-  // You might want to update the state or make an API call here to persist the changes
-};
 
-const handleEdit = (record: User) => {
-  console.log("Edit", record);
-  // Implement edit logic here
-};
-
-const handleDelete = (record: User) => {
-  console.log("Delete", record);
-  // Implement delete logic here
-};
 const UserTable: React.FC = () => {
   const [data, setData] = useState(initialData);
   const [searchText, setSearchText] = useState("");
-  const [roleFilter, setRoleFilter] = useState<string | undefined>(undefined);
+  const [roleFilter, setRoleFilter] = useState<number | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<boolean | undefined>(
     undefined
   );
@@ -355,15 +243,16 @@ const UserTable: React.FC = () => {
   useEffect(() => {
     const filteredData = initialData.filter((user) => {
       const matchesSearchText =
-        user.firstName
-          .toLowerCase()
+        user.first_name
+          ?.toLowerCase()
           .includes(debouncedSearchText.toLowerCase()) ||
-        user.lastName
-          .toLowerCase()
+        user.last_name
+          ?.toLowerCase()
           .includes(debouncedSearchText.toLowerCase()) ||
         user.email.toLowerCase().includes(debouncedSearchText.toLowerCase());
 
-      const matchesRole = roleFilter ? user.role === roleFilter : true;
+      const matchesRole =
+        roleFilter !== undefined ? user.role_id === roleFilter : true;
       const matchesStatus =
         statusFilter !== undefined ? user.status === statusFilter : true;
 
@@ -382,10 +271,10 @@ const UserTable: React.FC = () => {
             allowClear
             style={{ width: "fit-content" }}
           >
-            <Option value="Admin">Admin</Option>
-            <Option value="User">User</Option>
-            <Option value="Doctor">Doctor</Option>
-            <Option value="Patient">Patient</Option>
+            <Option value={1}>Admin</Option>
+            <Option value={2}>User</Option>
+            <Option value={3}>Doctor</Option>
+            <Option value={4}>Patient</Option>
           </Select>
           <Select
             placeholder="Filter by Status"
@@ -393,12 +282,8 @@ const UserTable: React.FC = () => {
             allowClear
             style={{ width: "fit-content" }}
           >
-            <Option value={true}>
-              <p className="text-green-600">Active</p>
-            </Option>
-            <Option value={false}>
-              <p className="text-red-600">Inactive</p>
-            </Option>
+            <Option value={true}>Active</Option>
+            <Option value={false}>Inactive</Option>
           </Select>
           <Search
             placeholder="Search users"
@@ -414,7 +299,7 @@ const UserTable: React.FC = () => {
       <Table
         columns={columns}
         dataSource={data}
-        rowKey="userId"
+        rowKey="user_id"
         pagination={{ pageSize: 6 }}
       />
     </div>

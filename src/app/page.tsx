@@ -1,11 +1,22 @@
-import { Button } from "antd";
-export default function Home() {
+"use client";
+import React from "react";
+import HomePageLayout from "./components/Common/Layout/HomePageLayout";
+import { CarouselSection } from "./components/Pages/HomePage/CarouselSection";
+import SearchSection from "./components/Pages/HomePage/SearchSection";
+import BookingSection from "./components/Pages/HomePage/BookingSection";
+import SpecialtySection from "./components/Pages/HomePage/SpecialtySection";
+
+const HomePage: React.FC = () => {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Button type="primary">Button</Button>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
-    </div>
+    <HomePageLayout>
+      <div className="home-page mx-auto w-full bg-gradient-to-bl from-[#9de8f4] to-blue-100">
+        <CarouselSection />
+        <SearchSection />
+        <BookingSection />
+        <SpecialtySection />
+      </div>
+    </HomePageLayout>
   );
-}
+};
+
+export default HomePage;

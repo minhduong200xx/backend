@@ -23,20 +23,13 @@ const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
   useEffect(() => {
     if (selectedDoctor) {
       form.setFieldsValue(selectedDoctor);
-      form.setFieldsValue({
-        date_of_birth: selectedDoctor.date_of_birth
-          ? new Date(selectedDoctor.date_of_birth).toISOString().split("T")[0]
-          : "",
-      });
     }
   }, [selectedDoctor, form]);
 
   const handleSave = () => {
     form.validateFields().then((values: Doctor) => {
       onSave(values);
-      console.log("values", values);
       setIsEditing(false);
-      return values;
     });
   };
 
@@ -187,7 +180,11 @@ const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
               >
                 <Input
                   disabled
-                  value={calculateAge(selectedDoctor.date_of_birth!)}
+                  value={
+                    selectedDoctor.date_of_birth
+                      ? calculateAge(selectedDoctor.date_of_birth)
+                      : ""
+                  }
                   style={{ color: "black" }}
                 />
               </Form.Item>
@@ -233,22 +230,6 @@ const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
           >
             <Input disabled={!isEditing} style={{ color: "black" }} />
           </Form.Item>
-          {/* <Form.Item
-            label="Medical Records"
-            name="medical_records"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 20 }}
-          >
-            <Input.TextArea disabled={!isEditing} style={{ color: "black" }} />
-          </Form.Item>
-          <Form.Item
-            label="Appointments"
-            name="appointments"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 20 }}
-          >
-            <Input.TextArea disabled={!isEditing} style={{ color: "black" }} />
-          </Form.Item> */}
         </Form>
       )}
     </Modal>
