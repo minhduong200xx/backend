@@ -47,7 +47,7 @@ const HomePageLayout: React.FC<{ children: React.ReactNode }> = ({
             <Link href="/blog">Blog</Link>
           </Menu.Item>
           <Menu.Item key="6" icon={<CalendarOutlined />}>
-            <Link href="/booking-appointment">Appointment</Link>
+            <Link href="/my-appointment">Appointment</Link>
           </Menu.Item>
         </Menu>
         <div className="flex items-center space-x-4">

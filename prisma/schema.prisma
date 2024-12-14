@@ -32,6 +32,7 @@ model User {
   updated_at DateTime  @updatedAt
   patient    Patients? 
   doctor     Doctors?
+  image      String?
   status     Boolean @default(true)  
 }
 
@@ -43,7 +44,7 @@ model Role {
 }
 
 model Patients {
-  patient_id        Int              @id @default(autoincrement())
+   patient_id        Int              @id @default(autoincrement())
   user_id           Int              @unique
   first_name        String
   last_name         String
@@ -57,24 +58,30 @@ model Patients {
   appointments      Appointments[]
   medical_records   Medical_Records[]
   user              User             @relation(fields: [user_id], references: [user_id])
+  image             String?
 }
 
 model Doctors {
-  doctor_id        Int              @id @default(autoincrement())
+ doctor_id        Int              @id @default(autoincrement())
   user_id          Int              @unique
   first_name       String           
   last_name        String
-  specialty        String?
-  date_of_birth     DateTime?
-  email             String?
-  gender            String?
-  phone_number      String?
-  address           String?
+  speciality        String?
+  date_of_birth    DateTime?
+  email            String?
+  gender           String?
+  phone_number     String?
+  address          String?
   experience_years Int?
-  working_days     String?
   appointments     Appointments[]
   medical_records  Medical_Records[]
   user             User             @relation(fields: [user_id], references: [user_id])
+  image            String?
+  degree           String?
+  about            String?
+  available        Boolean          @default(true)
+  fees             Float
+  slot_booked      DateTime[]
 }
 
 
@@ -87,11 +94,15 @@ model Departments {
 
 model Appointments {
   appointment_id    Int      @id @default(autoincrement())
-  appointment_date  DateTime
-  first_name String?
-  last_name String?
+appointment_date_time DateTime
+  first_name        String?
+  last_name         String?
   reason_for_visit  String?
   status            String    @default("Scheduled")
+  amount            Float
+  payment           Boolean   @default(false)
+  cancelled         Boolean   @default(false)
+  isCompleted       Boolean   @default(false)
   patient_id        Int
   doctor_id         Int
   patient           Patients  @relation(fields: [patient_id], references: [patient_id], onDelete: Cascade)

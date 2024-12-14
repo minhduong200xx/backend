@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { Card, Button } from "antd";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 interface DoctorCardProps {
   name: string;
+  available: boolean;
   specialty: string;
-  imageUrl: string;
   onBookAppointment: () => void;
   onViewProfile: () => void;
 }
@@ -14,22 +14,24 @@ interface DoctorCardProps {
 const DoctorCard: React.FC<DoctorCardProps> = ({
   name,
   specialty,
-  imageUrl,
+  available,
   onBookAppointment,
   onViewProfile,
 }) => {
   return (
     <Card className="doctor-card text-center p-4 rounded-lg shadow-md">
-      <div className="relative w-full h-48 mb-4">
-        <Image
-          src={imageUrl}
-          alt={name}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-lg"
-        />
-      </div>
+      <div className="relative w-full h-48 mb-4"></div>
       <h3 className="text-xl font-bold mb-2">{name}</h3>
+      <span className="flex items-center justify-center mb-2">
+        <p
+          className={`w-2 h-2 rounded-full ${
+            available ? "bg-green-600" : "bg-red-600"
+          }`}
+        ></p>
+        <p className={`ml-2 ${available ? "text-green-500" : "text-red-500"}`}>
+          {available ? "Available" : "Unavailable"}
+        </p>
+      </span>
       <p className="text-gray-600 mb-4">{specialty}</p>
       <div className="flex justify-center space-x-4">
         <Button type="primary" onClick={onBookAppointment}>

@@ -5,6 +5,7 @@ import { CarouselSection } from "./components/Pages/HomePage/CarouselSection";
 import SearchSection from "./components/Pages/HomePage/SearchSection";
 import BookingSection from "./components/Pages/HomePage/BookingSection";
 import SpecialtySection from "./components/Pages/HomePage/SpecialtySection";
+import TopDoctorsSection from "./components/Pages/HomePage/TopDoctorsSection";
 
 const HomePage: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const HomePage: React.FC = () => {
         <SearchSection />
         <BookingSection />
         <SpecialtySection />
+        <TopDoctorsSection />
       </div>
     </HomePageLayout>
   );

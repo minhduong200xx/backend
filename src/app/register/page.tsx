@@ -3,13 +3,13 @@ import React from "react";
 import { Form, Input, Button, message } from "antd";
 import Link from "next/link";
 import "tailwindcss/tailwind.css";
+import register from "@/actions/user.actions";
 
 const RegisterPage: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    // Implement your registration logic here
+  const onFinish = async (values: any) => {
+    await register(values);
     messageApi.open({
       type: "success",
       content:

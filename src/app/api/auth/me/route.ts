@@ -119,12 +119,24 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
+    let doctor = null;
+    let patient = null;
+
+    if (user.role_id === 3) {
+      doctor = await prisma.doctors.findUnique({
+        where: { user_id: user.user_id },
+      });
+    } else if (user.role_id === 4) {
+      patient = await prisma.patients.findUnique({
+        where: { user_id: user.user_id },
+      });
+    }
+
     return NextResponse.json({
       user: {
-        user_id: user.user_id,
-        user_name: user.user_name,
-        email: user.email,
-        role_id: user.role_id,
+        ...user,
+        doctor_id: doctor ? doctor.doctor_id : null,
+        patient_id: patient ? patient.patient_id : null,
       },
     });
   } catch (error) {

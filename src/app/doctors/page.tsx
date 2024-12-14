@@ -1,41 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Input, Select, Card, Row, Col } from "antd";
+import { Input, Select, Row, Col } from "antd";
 import "tailwindcss/tailwind.css";
 import DoctorCard from "../components/Common/Card/DoctorCard";
-import doc1 from "@/assets/assets_frontend/doc1.png";
+import { getDoctors } from "../lib/doctors";
+import { Doctor } from "../types/type";
+import { useRouter } from "next/navigation";
+
 const { Search } = Input;
 const { Option } = Select;
 
-const doctors = [
-  {
-    name: "Dr. John Doe",
-    specialty: "Cardiology",
-    experience: 10,
-    imageUrl: "/images/doctor1.jpg",
-  },
-  {
-    name: "Dr. Jane Smith",
-    specialty: "Dermatology",
-    experience: 5,
-    imageUrl: "/images/doctor2.jpg",
-  },
-  {
-    name: "Dr. Alice Johnson",
-    specialty: "Neurology",
-    experience: 15,
-    imageUrl: "/images/doctor3.jpg",
-  },
-  {
-    name: "Dr. Bob Brown",
-    specialty: "Pediatrics",
-    experience: 8,
-    imageUrl: "/images/doctor4.jpg",
-  },
-];
-
 const DoctorPage: React.FC = () => {
-  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
+
   const [searchText, setSearchText] = useState("");
   const [specialtyFilter, setSpecialtyFilter] = useState<string | undefined>(
     undefined
@@ -43,22 +21,36 @@ const DoctorPage: React.FC = () => {
   const [experienceFilter, setExperienceFilter] = useState<number | undefined>(
     undefined
   );
+  const router = useRouter();
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await getDoctors();
+        setDoctors(response.data);
+        setFilteredDoctors(response.data);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
 
   useEffect(() => {
     const filtered = doctors.filter((doctor) => {
-      const matchesSearchText = doctor.name
+      const matchesSearchText = (doctor.first_name + " " + doctor.last_name)
         .toLowerCase()
         .includes(searchText.toLowerCase());
       const matchesSpecialty = specialtyFilter
         ? doctor.specialty === specialtyFilter
         : true;
       const matchesExperience = experienceFilter
-        ? doctor.experience >= experienceFilter
+        ? (doctor.experience_years ?? 0) >= experienceFilter
         : true;
       return matchesSearchText && matchesSpecialty && matchesExperience;
     });
     setFilteredDoctors(filtered);
-  }, [searchText, specialtyFilter, experienceFilter]);
+  }, [searchText, specialtyFilter, experienceFilter, doctors]);
 
   const handleSearch = (value: string) => {
     setSearchText(value);
@@ -93,10 +85,13 @@ const DoctorPage: React.FC = () => {
             allowClear
             className="w-40"
           >
-            <Option value="Cardiology">Cardiology</Option>
-            <Option value="Dermatology">Dermatology</Option>
-            <Option value="Neurology">Neurology</Option>
-            <Option value="Pediatrics">Pediatrics</Option>
+            {Array.from(new Set(doctors.map((doctor) => doctor.specialty))).map(
+              (specialty, index) => (
+                <Option key={index} value={specialty}>
+                  {specialty}
+                </Option>
+              )
+            )}
           </Select>
           <Select
             placeholder="Filter by Experience Years"
@@ -119,11 +114,15 @@ const DoctorPage: React.FC = () => {
         {filteredDoctors.map((doctor, index) => (
           <Col key={index} xs={24} sm={12} md={8} lg={6}>
             <DoctorCard
-              name={doctor.name}
-              specialty={doctor.specialty}
-              imageUrl={doc1}
-              onBookAppointment={() => handleBookAppointment(doctor.name)}
-              onViewProfile={() => handleViewProfile(doctor.name)}
+              name={doctor.first_name + " " + doctor.last_name}
+              specialty={doctor.specialty ?? ""}
+              available={doctor.available ?? false}
+              onBookAppointment={() =>
+                handleBookAppointment(
+                  doctor.first_name + " " + doctor.last_name
+                )
+              }
+              onViewProfile={() => router.push(`/doctors/${doctor.doctor_id}`)}
             />
           </Col>
         ))}

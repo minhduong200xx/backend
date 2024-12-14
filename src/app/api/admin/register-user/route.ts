@@ -72,6 +72,7 @@ export async function POST(req: NextRequest) {
           user_id: newUser.user_id,
           first_name: first_name,
           last_name: last_name,
+          fees: 0,
         },
       });
     }
