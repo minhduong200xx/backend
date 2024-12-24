@@ -117,9 +117,11 @@ const columns: ColumnsType<User> = [
   },
 ];
 
+import { v4 as uuidv4 } from "uuid";
+
 const initialData: User[] = [
   {
-    user_id: 1,
+    user_id: "69208d3c-8d58-44b9-ad74-0fbaa30abbc5",
     first_name: "John",
     last_name: "Doe",
     user_name: "johndoe",
@@ -130,7 +132,7 @@ const initialData: User[] = [
     status: true,
   },
   {
-    user_id: 2,
+    user_id: "2ce3a9d6-230a-4d23-bb8c-d56edc4c6817",
     first_name: "Joe",
     last_name: "Doe",
     user_name: "joedoe",
@@ -142,7 +144,7 @@ const initialData: User[] = [
   },
   // Add more user data here
   {
-    user_id: 3,
+    user_id: "c97a60d3-b9b5-4b36-8ec0-be45f1ac62c1",
     first_name: "Jane",
     last_name: "Smith",
     user_name: "janesmith",
@@ -153,7 +155,7 @@ const initialData: User[] = [
     status: true,
   },
   {
-    user_id: 4,
+    user_id: "d4924850-8f5d-408d-b271-921ec3b32f19",
     first_name: "Alice",
     last_name: "Johnson",
     user_name: "alicejohnson",
@@ -164,7 +166,7 @@ const initialData: User[] = [
     status: false,
   },
   {
-    user_id: 5,
+    user_id: "f1d0104a-d541-4327-9f61-3b5f6044355f",
     first_name: "Bob",
     last_name: "Brown",
     user_name: "bobbrown",
@@ -172,61 +174,6 @@ const initialData: User[] = [
     role_id: 3,
     created_at: "2023-04-01",
     updated_at: "2023-04-02",
-    status: true,
-  },
-  {
-    user_id: 6,
-    first_name: "Charlie",
-    last_name: "Davis",
-    user_name: "charliedavis",
-    email: "charlie.davis@example.com",
-    role_id: 2,
-    created_at: "2023-05-01",
-    updated_at: "2023-05-02",
-    status: false,
-  },
-  {
-    user_id: 7,
-    first_name: "Diana",
-    last_name: "Evans",
-    user_name: "dianaevans",
-    email: "diana.evans@example.com",
-    role_id: 1,
-    created_at: "2023-06-01",
-    updated_at: "2023-06-02",
-    status: true,
-  },
-  {
-    user_id: 8,
-    first_name: "Eve",
-    last_name: "Foster",
-    user_name: "evefoster",
-    email: "eve.foster@example.com",
-    role_id: 3,
-    created_at: "2023-07-01",
-    updated_at: "2023-07-02",
-    status: true,
-  },
-  {
-    user_id: 9,
-    first_name: "Frank",
-    last_name: "Green",
-    user_name: "frankgreen",
-    email: "frank.green@example.com",
-    role_id: 2,
-    created_at: "2023-08-01",
-    updated_at: "2023-08-02",
-    status: false,
-  },
-  {
-    user_id: 10,
-    first_name: "Grace",
-    last_name: "Harris",
-    user_name: "graceharris",
-    email: "grace.harris@example.com",
-    role_id: 1,
-    created_at: "2023-09-01",
-    updated_at: "2023-09-02",
     status: true,
   },
 ];

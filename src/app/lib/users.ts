@@ -64,7 +64,7 @@ export async function getUserRole(userId: number): Promise<AxiosResponse> {
   }
 }
 export async function changeUserToPatient(
-  userId: number
+  userId: string
 ): Promise<AxiosResponse> {
   try {
     const response = await axios.put(`/api/users/${userId}/patient`);

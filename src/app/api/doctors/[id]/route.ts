@@ -11,7 +11,7 @@ export async function GET(
 ) {
   try {
     const doctor = await prisma.doctors.findUnique({
-      where: { doctor_id: Number(params.id) },
+      where: { doctor_id: params.id },
     });
 
     if (!doctor) {
@@ -34,7 +34,7 @@ export async function DELETE(
 ) {
   try {
     const doctor = await prisma.doctors.findUnique({
-      where: { doctor_id: Number(params.id) },
+      where: { doctor_id: params.id },
     });
 
     if (!doctor) {
@@ -42,7 +42,7 @@ export async function DELETE(
     }
 
     await prisma.doctors.delete({
-      where: { doctor_id: Number(params.id) },
+      where: { doctor_id: params.id },
     });
 
     return NextResponse.json({
@@ -70,7 +70,7 @@ export async function PUT(
     }
 
     const updatedDoctor = await prisma.doctors.update({
-      where: { doctor_id: Number(params.id) },
+      where: { doctor_id: params.id },
       data,
     });
 

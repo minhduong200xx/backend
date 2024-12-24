@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Table, message } from "antd";
-
+import { Table, message, Button } from "antd";
 import { Appointment } from "../types/type";
 import { useAuth } from "@/app/context/AuthProvider";
 import Loading from "@/app/loading";
-import { getPatientAppointments } from "../lib/patients";
+import {
+  getPatientAppointments,
+  cancelPatientAppointment,
+} from "../lib/patients";
 
 const MyAppointmentsPage: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -30,6 +32,23 @@ const MyAppointmentsPage: React.FC = () => {
     fetchAppointments();
   }, [user?.patient_id]);
 
+  const handleCancel = async (appointmentId: number) => {
+    try {
+      await cancelPatientAppointment(appointmentId);
+      message.success("Appointment cancelled successfully.");
+      setAppointments((prev) =>
+        prev.map((appointment) =>
+          appointment.appointment_id === appointmentId
+            ? { ...appointment, cancelled: true }
+            : appointment
+        )
+      );
+    } catch (error) {
+      console.error("Error cancelling appointment:", error);
+      message.error("Failed to cancel appointment.");
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -41,7 +60,6 @@ const MyAppointmentsPage: React.FC = () => {
       key: "appointment_date_time",
       render: (text: string) => new Date(text).toLocaleString(),
     },
-
     {
       title: "Reason",
       dataIndex: "reason_for_visit",
@@ -51,6 +69,11 @@ const MyAppointmentsPage: React.FC = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (status: string) => (
+        <span style={{ color: status === "Scheduled" ? "green" : "inherit" }}>
+          {status}
+        </span>
+      ),
     },
     {
       title: "Amount",
@@ -58,7 +81,42 @@ const MyAppointmentsPage: React.FC = () => {
       key: "amount",
       render: (amount: number) => `$${amount.toFixed(2)}`,
     },
+    {
+      title: "Payment",
+      dataIndex: "payment",
+      key: "payment",
+      render: (payment: boolean, record: Appointment) => (
+        <span>
+          {payment ? (
+            "Paid"
+          ) : (
+            <Button type="link" onClick={() => handlePayOnline(record)}>
+              Pay Online
+            </Button>
+          )}
+        </span>
+      ),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_: any, record: Appointment) => (
+        <Button
+          type="link"
+          danger
+          onClick={() => handleCancel(record.appointment_id)}
+          disabled={record.cancelled}
+        >
+          {record.cancelled ? "Cancelled" : "Cancel"}
+        </Button>
+      ),
+    },
   ];
+
+  const handlePayOnline = (record: Appointment) => {
+    // Implement your payment logic here
+    console.log("Paying online for appointment:", record);
+  };
 
   return (
     <div className="p-8">

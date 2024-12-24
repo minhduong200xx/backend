@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const appointments = await prisma.appointments.findMany({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
     });
     if (appointments.length === 0) {
       return NextResponse.json(

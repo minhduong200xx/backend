@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const stockTransaction = await prisma.stock_Transactions.findUnique({
-      where: { transaction_id: Number(params.id) },
+      where: { transaction_id: params.id },
     });
     if (!stockTransaction) {
       return NextResponse.json(
@@ -36,7 +36,7 @@ export async function PUT(
   const data = await req.json();
   try {
     const stockTransaction = await prisma.stock_Transactions.findUnique({
-      where: { transaction_id: Number(params.id) },
+      where: { transaction_id: params.id },
     });
     if (!stockTransaction) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function PUT(
       );
     }
     const updatedStockTransaction = await prisma.stock_Transactions.update({
-      where: { transaction_id: Number(params.id) },
+      where: { transaction_id: params.id },
       data,
     });
     return NextResponse.json(updatedStockTransaction);
@@ -65,7 +65,7 @@ export async function DELETE(
 ) {
   try {
     const stockTransaction = await prisma.stock_Transactions.findUnique({
-      where: { transaction_id: Number(params.id) },
+      where: { transaction_id: params.id },
     });
     if (!stockTransaction) {
       return NextResponse.json(
@@ -74,7 +74,7 @@ export async function DELETE(
       );
     }
     const deletedStockTransaction = await prisma.stock_Transactions.delete({
-      where: { transaction_id: Number(params.id) },
+      where: { transaction_id: params.id },
     });
     return NextResponse.json(deletedStockTransaction);
   } catch (error) {

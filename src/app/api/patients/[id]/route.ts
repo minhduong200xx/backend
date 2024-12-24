@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export async function GET({ params }: { params: { id: string } }) {
   try {
     const patient = await prisma.patients.findUnique({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
     });
 
     if (!patient) {
@@ -48,7 +48,7 @@ export async function PUT(
     //   );
     // }
     const patient = await prisma.patients.findUnique({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
     });
 
     if (!patient) {
@@ -89,7 +89,7 @@ export async function PUT(
     }
 
     const updatedPatient = await prisma.patients.update({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
       data: updatedData,
     });
 
@@ -110,7 +110,7 @@ export async function DELETE(
 ) {
   try {
     const patient = await prisma.patients.findUnique({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
     });
 
     if (!patient) {
@@ -118,7 +118,7 @@ export async function DELETE(
     }
 
     await prisma.patients.delete({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
     });
 
     return NextResponse.json({

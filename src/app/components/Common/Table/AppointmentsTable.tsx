@@ -100,8 +100,8 @@ const AppointmentsTable: React.FC = () => {
     },
     {
       title: "Appointment Date",
-      dataIndex: "appointment_date",
-      key: "appointment_date",
+      dataIndex: "appointment_date_time",
+      key: "appointment_date_time",
       render: (date: string) => new Date(date).toISOString().split("T")[0],
     },
     {

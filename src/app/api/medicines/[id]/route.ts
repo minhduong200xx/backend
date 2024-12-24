@@ -53,7 +53,7 @@ export async function PUT(
 
   try {
     const medicine = await prisma.medicines.findUnique({
-      where: { medicine_id: Number(params.id) },
+      where: { medicine_id: params.id },
     });
     if (!medicine) {
       return NextResponse.json(
@@ -63,7 +63,7 @@ export async function PUT(
     }
     const updatedMedicine = await prisma.medicines.update({
       where: {
-        medicine_id: Number(params.id),
+        medicine_id: params.id,
       },
       data: {
         medicine_name,
@@ -92,7 +92,7 @@ export async function DELETE(
 ) {
   try {
     const medicine = await prisma.medicines.findUnique({
-      where: { medicine_id: Number(params.id) },
+      where: { medicine_id: params.id },
     });
     if (!medicine) {
       return NextResponse.json(
@@ -102,7 +102,7 @@ export async function DELETE(
     }
     await prisma.medicines.delete({
       where: {
-        medicine_id: Number(params.id),
+        medicine_id: params.id,
       },
     });
 

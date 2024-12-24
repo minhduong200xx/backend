@@ -1,5 +1,5 @@
 export interface Supplier {
-  supplier_id: number;
+  supplier_id: string;
   supplier_name: string;
   contact_person?: string;
   phone_number?: string;
@@ -9,12 +9,12 @@ export interface Supplier {
 }
 
 export interface User {
-  user_id: number;
+  user_id: string;
   first_name?: string;
   last_name?: string;
   user_name: string;
   email: string;
-  password: string;
+  password?: string;
   role_id: number;
   created_at: string;
   updated_at: string;
@@ -22,8 +22,8 @@ export interface User {
   doctor?: Doctor;
   image?: string;
   status: boolean;
-  patient_id?: number;
-  doctor_id?: number;
+  patient_id?: string;
+  doctor_id?: string;
 }
 
 export interface Role {
@@ -33,8 +33,8 @@ export interface Role {
 }
 
 export interface Patient {
-  patient_id: number;
-  user_id: number;
+  patient_id: string;
+  user_id: string;
   first_name: string;
   last_name: string;
   date_of_birth?: string;
@@ -51,8 +51,8 @@ export interface Patient {
 }
 
 export interface Doctor {
-  doctor_id: number;
-  user_id: number;
+  doctor_id: string;
+  user_id: string;
   first_name: string;
   last_name: string;
   speciality?: string;
@@ -80,7 +80,7 @@ export interface Department {
 }
 
 export interface Appointment {
-  appointment_id: number;
+  appointment_id: string;
   slot_date: string;
   slot_time: string;
   first_name?: string;
@@ -91,70 +91,70 @@ export interface Appointment {
   payment: boolean;
   cancelled: boolean;
   isCompleted: boolean;
-  patient_id: number;
-  doctor_id: number;
+  patient_id: string;
+  doctor_id: string;
   patient: Patient;
   doctor: Doctor;
   payments: Payment[];
 }
 
 export interface MedicalRecord {
-  record_id: number;
+  record_id: string;
   diagnosis?: string;
   treatment?: string;
   record_date: string;
-  patient_id: number;
-  doctor_id: number;
+  patient_id: string;
+  doctor_id: string;
   patient: Patient;
   doctor: Doctor;
   prescriptions: Prescription[];
 }
 
 export interface Prescription {
-  prescription_id: number;
+  prescription_id: string;
   medicine_name?: string;
   dosage?: string;
   duration?: string;
-  record_id: number;
+  record_id: string;
   record: MedicalRecord;
   prescription_medicines: PrescriptionMedicine[];
 }
 
 export interface Payment {
-  payment_id: number;
+  payment_id: string;
   payment_date: string;
   amount: number;
   payment_method: string;
-  appointment_id: number;
+  appointment_id: string;
   appointment: Appointment;
 }
 
 export interface Medicine {
-  medicine_id: number;
+  medicine_id: string;
   medicine_name: string;
   description?: string;
   quantity_in_stock: number;
   price_per_unit: number;
   expiration_date?: string;
-  supplier_id: number;
+  supplier_id: string;
   supplier: Supplier;
   stock_transactions: StockTransaction[];
   prescription_medicines: PrescriptionMedicine[];
 }
 
 export interface StockTransaction {
-  transaction_id: number;
+  transaction_id: string;
   transaction_date: string;
   transaction_type: string;
   quantity: number;
   notes?: string;
-  medicine_id: number;
+  medicine_id: string;
   medicine: Medicine;
 }
 
 export interface PrescriptionMedicine {
-  prescription_id: number;
-  medicine_id: number;
+  prescription_id: string;
+  medicine_id: string;
   quantity: number;
   prescription: Prescription;
   medicine: Medicine;

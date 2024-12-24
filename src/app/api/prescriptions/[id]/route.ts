@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const prescription = await prisma.prescriptions.findUnique({
-      where: { prescription_id: Number(params.id) },
+      where: { prescription_id: params.id },
     });
     if (!prescription) {
       return NextResponse.json(
@@ -36,7 +36,7 @@ export async function PUT(
   const data = await req.json();
   try {
     const prescription = await prisma.prescriptions.findUnique({
-      where: { prescription_id: Number(params.id) },
+      where: { prescription_id: params.id },
     });
     if (!prescription) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function PUT(
       );
     }
     const updatedPrescription = await prisma.prescriptions.update({
-      where: { prescription_id: Number(params.id) },
+      where: { prescription_id: params.id },
       data,
     });
     return NextResponse.json(updatedPrescription);
@@ -65,7 +65,7 @@ export async function DELETE(
 ) {
   try {
     const prescription = await prisma.prescriptions.findUnique({
-      where: { prescription_id: Number(params.id) },
+      where: { prescription_id: params.id },
     });
     if (!prescription) {
       return NextResponse.json(
@@ -74,7 +74,7 @@ export async function DELETE(
       );
     }
     const deletedPrescription = await prisma.prescriptions.delete({
-      where: { prescription_id: Number(params.id) },
+      where: { prescription_id: params.id },
     });
     return NextResponse.json(deletedPrescription);
   } catch (error) {

@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const payment = await prisma.payments.findUnique({
-      where: { payment_id: Number(params.id) },
+      where: { payment_id: params.id },
     });
     if (!payment) {
       return NextResponse.json(
@@ -36,7 +36,7 @@ export async function PUT(
   const data = await req.json();
   try {
     const payment = await prisma.payments.findUnique({
-      where: { payment_id: Number(params.id) },
+      where: { payment_id: params.id },
     });
     if (!payment) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function PUT(
       );
     }
     const updatedPayment = await prisma.payments.update({
-      where: { payment_id: Number(params.id) },
+      where: { payment_id: params.id },
       data,
     });
     return NextResponse.json(updatedPayment);
@@ -65,7 +65,7 @@ export async function DELETE(
 ) {
   try {
     const payment = await prisma.payments.findUnique({
-      where: { payment_id: Number(params.id) },
+      where: { payment_id: params.id },
     });
     if (!payment) {
       return NextResponse.json(
@@ -74,7 +74,7 @@ export async function DELETE(
       );
     }
     const deletedPayment = await prisma.payments.delete({
-      where: { payment_id: Number(params.id) },
+      where: { payment_id: params.id },
     });
     return NextResponse.json(deletedPayment);
   } catch (error) {

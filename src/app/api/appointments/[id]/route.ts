@@ -10,7 +10,7 @@ export async function PUT(
   try {
     const data = await request.json();
     const appointment = await prisma.appointments.findUnique({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: params.id },
     });
     if (!appointment) {
       return NextResponse.json(
@@ -19,7 +19,7 @@ export async function PUT(
       );
     }
     const updatedAppointment = await prisma.appointments.update({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: params.id },
       data,
     });
     return NextResponse.json(updatedAppointment);
@@ -38,7 +38,7 @@ export async function DELETE(
 ) {
   try {
     const appointment = await prisma.appointments.findUnique({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: params.id },
     });
     if (!appointment) {
       return NextResponse.json(
@@ -47,7 +47,7 @@ export async function DELETE(
       );
     }
     await prisma.appointments.delete({
-      where: { appointment_id: Number(params.id) },
+      where: { appointment_id: params.id },
     });
     return NextResponse.json({ message: "Appointment deleted" });
   } catch (error) {

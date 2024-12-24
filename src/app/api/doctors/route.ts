@@ -28,21 +28,19 @@ export async function POST(request: NextRequest) {
     const {
       first_name,
       last_name,
-      specialty,
+      speciality,
       email,
       phone_number,
       experience_years,
-      working_days,
     } = await request.json();
     const newDoctor = await prisma.doctors.create({
       data: {
         first_name,
         last_name,
-        specialty,
+        speciality,
         email,
         phone_number,
         experience_years,
-        working_days,
       },
     });
     return NextResponse.json(newDoctor, { status: 201 });

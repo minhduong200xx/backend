@@ -122,11 +122,11 @@ export async function GET(req: NextRequest) {
     let doctor = null;
     let patient = null;
 
-    if (user.role_id === 3) {
+    if (user.role_id === 4) {
       doctor = await prisma.doctors.findUnique({
         where: { user_id: user.user_id },
       });
-    } else if (user.role_id === 4) {
+    } else if (user.role_id === 3) {
       patient = await prisma.patients.findUnique({
         where: { user_id: user.user_id },
       });

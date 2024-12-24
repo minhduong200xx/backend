@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const department = await prisma.departments.findUnique({
-      where: { department_id: Number(params.id) },
+      where: { department_id: params.id },
     });
     if (!department) {
       return NextResponse.json(
@@ -36,7 +36,7 @@ export async function PUT(
   const data = await req.json();
   try {
     const department = await prisma.departments.findUnique({
-      where: { department_id: Number(params.id) },
+      where: { department_id: params.id },
     });
     if (!department) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function PUT(
       );
     }
     const updatedDepartment = await prisma.departments.update({
-      where: { department_id: Number(params.id) },
+      where: { department_id: params.id },
       data,
     });
     return NextResponse.json({
@@ -68,7 +68,7 @@ export async function DELETE(
 ) {
   try {
     const department = await prisma.departments.findUnique({
-      where: { department_id: Number(params.id) },
+      where: { department_id: params.id },
     });
     if (!department) {
       return NextResponse.json(
@@ -77,7 +77,7 @@ export async function DELETE(
       );
     }
     const deletedDepartment = await prisma.departments.delete({
-      where: { department_id: Number(params.id) },
+      where: { department_id: params.id },
     });
     return NextResponse.json({
       message: "Department deleted",

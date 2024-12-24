@@ -72,7 +72,7 @@ export async function getPatientMedicalRecords(
 }
 
 export async function getPatientAppointments(
-  patientId: number
+  patientId: string
 ): Promise<AxiosResponse> {
   try {
     const response = await axios.get(`/api/appointments/patients/${patientId}`);
@@ -84,7 +84,7 @@ export async function getPatientAppointments(
 }
 
 export async function getPatientRole(
-  patientId: number
+  patientId: string
 ): Promise<AxiosResponse> {
   try {
     const response = await axios.get(`/api/patients/${patientId}/role`);
@@ -123,12 +123,13 @@ export async function onlinePayment(
 }
 
 export async function cancelPatientAppointment(
-  patientId: number,
   appointmentId: number
 ): Promise<AxiosResponse> {
+  const data = { cancelled: true };
   try {
     const response = await axios.put(
-      `/api/patients/${patientId}/appointments/${appointmentId}/cancelled`
+      `/api/appointments/${appointmentId}`,
+      data
     );
     return response.data;
   } catch (error) {

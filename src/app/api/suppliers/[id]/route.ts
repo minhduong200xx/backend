@@ -42,7 +42,7 @@ export async function PUT(
   try {
     const data = await request.json();
     const supplier = await prisma.suppliers.findUnique({
-      where: { supplier_id: Number(params.id) },
+      where: { supplier_id: params.id },
     });
     if (!supplier) {
       return NextResponse.json(
@@ -51,7 +51,7 @@ export async function PUT(
       );
     }
     const updateSupplier = await prisma.suppliers.update({
-      where: { supplier_id: Number(params.id) },
+      where: { supplier_id: params.id },
       data: data,
     });
 
@@ -75,7 +75,7 @@ export async function DELETE(
 ) {
   try {
     const supplier = await prisma.suppliers.findUnique({
-      where: { supplier_id: Number(params.id) },
+      where: { supplier_id: params.id },
     });
 
     if (!supplier) {
@@ -86,7 +86,7 @@ export async function DELETE(
     }
 
     await prisma.patients.delete({
-      where: { patient_id: Number(params.id) },
+      where: { patient_id: params.id },
     });
 
     return NextResponse.json({

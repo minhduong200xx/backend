@@ -9,7 +9,7 @@ datasource db {
 }
 
 model Suppliers {
-  supplier_id    Int      @id @default(autoincrement())
+  supplier_id    String   @id @default(uuid())
   supplier_name  String
   contact_person String?
   phone_number   String?
@@ -18,19 +18,18 @@ model Suppliers {
   medicines      Medicines[]
 }
 
-
 model User {
-  user_id    Int       @id @default(autoincrement())  @unique
+  user_id    String   @id @default(uuid()) @unique
   first_name String?
   last_name  String?
   user_name  String
-  email      String    @unique
+  email      String  @unique
   password   String
-  role       Role      @relation(fields: [role_id], references: [role_id])
-  role_id    Int       @default(2)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  patient    Patients? 
+  role       Role    @relation(fields: [role_id], references: [role_id])
+  role_id    Int  @default(2)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  patient    Patients?
   doctor     Doctors?
   image      String?
   status     Boolean @default(true)  
@@ -40,12 +39,12 @@ model Role {
   role_id   Int    @id @default(autoincrement())
   role_name String @unique
   users     User[]
-  
 }
 
+
 model Patients {
-   patient_id        Int              @id @default(autoincrement())
-  user_id           Int              @unique
+  patient_id        String     @id @default(uuid())
+  user_id           String     @unique
   first_name        String
   last_name         String
   date_of_birth     DateTime?
@@ -57,16 +56,16 @@ model Patients {
   medical_history   String?
   appointments      Appointments[]
   medical_records   Medical_Records[]
-  user              User             @relation(fields: [user_id], references: [user_id])
+  user              User       @relation(fields: [user_id], references: [user_id])
   image             String?
 }
 
 model Doctors {
- doctor_id        Int              @id @default(autoincrement())
-  user_id          Int              @unique
-  first_name       String           
+  doctor_id        String     @id @default(uuid())
+  user_id          String     @unique
+  first_name       String
   last_name        String
-  speciality        String?
+  speciality       String?
   date_of_birth    DateTime?
   email            String?
   gender           String?
@@ -75,104 +74,99 @@ model Doctors {
   experience_years Int?
   appointments     Appointments[]
   medical_records  Medical_Records[]
-  user             User             @relation(fields: [user_id], references: [user_id])
+  user             User       @relation(fields: [user_id], references: [user_id])
   image            String?
   degree           String?
   about            String?
-  available        Boolean          @default(true)
+  available        Boolean    @default(true)
   fees             Float
   slot_booked      DateTime[]
 }
 
-
 model Departments {
-  department_id   Int     @id @default(autoincrement())
+  department_id   String  @id @default(uuid())
   department_name String
   description     String?
 }
 
-
 model Appointments {
-  appointment_id    Int      @id @default(autoincrement())
-appointment_date_time DateTime
+  appointment_id    String   @id @default(uuid())
+  appointment_date_time DateTime
   first_name        String?
   last_name         String?
   reason_for_visit  String?
-  status            String    @default("Scheduled")
+  status            String   @default("Scheduled")
   amount            Float
-  payment           Boolean   @default(false)
-  cancelled         Boolean   @default(false)
-  isCompleted       Boolean   @default(false)
-  patient_id        Int
-  doctor_id         Int
+  payment           Boolean  @default(false)
+  cancelled         Boolean  @default(false)
+  isCompleted       Boolean  @default(false)
+  patient_id        String
+  doctor_id         String
   patient           Patients  @relation(fields: [patient_id], references: [patient_id], onDelete: Cascade)
   doctor            Doctors   @relation(fields: [doctor_id], references: [doctor_id], onDelete: Cascade)
   payments          Payments[]
 }
 
 model Medical_Records {
-  record_id   Int       @id @default(autoincrement())
+  record_id   String   @id @default(uuid())
   diagnosis   String?
   treatment   String?
-  record_date DateTime   @default(now())
-  patient_id  Int
-  doctor_id   Int
-  patient     Patients   @relation(fields: [patient_id], references: [patient_id],onDelete: Cascade)
+  record_date DateTime @default(now())
+  patient_id  String
+  doctor_id   String
+  patient     Patients   @relation(fields: [patient_id], references: [patient_id], onDelete: Cascade)
   doctor      Doctors    @relation(fields: [doctor_id], references: [doctor_id], onDelete: Cascade)
   prescriptions Prescriptions[]
 }
 
 model Prescriptions {
-  prescription_id Int                  @id @default(autoincrement())
+  prescription_id String @id @default(uuid())
   medicine_name   String?
   dosage          String?
   duration        String?
-  record_id       Int
-  record          Medical_Records      @relation(fields: [record_id], references: [record_id], onDelete: Cascade)
+  record_id       String
+  record          Medical_Records @relation(fields: [record_id], references: [record_id], onDelete: Cascade)
   prescription_medicines Prescriptions_Medicines[]
 }
 
 model Payments {
-  payment_id      Int       @id @default(autoincrement())
-  payment_date    DateTime  @default(now())
+  payment_id      String   @id @default(uuid())
+  payment_date    DateTime @default(now())
   amount          Float
-  payment_method  String    @default("Cash")
-  appointment_id  Int
+  payment_method  String   @default("Cash")
+  appointment_id  String
   appointment     Appointments @relation(fields: [appointment_id], references: [appointment_id], onDelete: Cascade)
 }
 
-
 model Medicines {
-  medicine_id       Int                    @id @default(autoincrement())
-  medicine_name     String
-  description       String?
-  quantity_in_stock Int                    @default(0)
-  price_per_unit    Float
-  expiration_date   DateTime?
-  supplier_id       Int
-  supplier          Suppliers              @relation(fields: [supplier_id], references: [supplier_id],onDelete: Cascade)
+  medicine_id     String   @id @default(uuid())
+  medicine_name   String
+  description     String?
+  quantity_in_stock Int     @default(0)
+  price_per_unit  Float
+  expiration_date DateTime?
+  supplier_id     String
+  supplier        Suppliers @relation(fields: [supplier_id], references: [supplier_id], onDelete: Cascade)
   stock_transactions Stock_Transactions[]
   prescription_medicines Prescriptions_Medicines[]
 }
 
-
 model Stock_Transactions {
-  transaction_id   Int       @id @default(autoincrement())
-  transaction_date DateTime  @default(now())
+  transaction_id   String   @id @default(uuid())
+  transaction_date DateTime @default(now())
   transaction_type String
   quantity         Int
   notes            String?
-  medicine_id      Int
-  medicine         Medicines @relation(fields: [medicine_id], references: [medicine_id],onDelete: Cascade)
+  medicine_id      String
+  medicine         Medicines @relation(fields: [medicine_id], references: [medicine_id], onDelete: Cascade)
 }
 
-
 model Prescriptions_Medicines {
-  prescription_id Int
-  medicine_id     Int
+  prescription_id String
+  medicine_id     String
   quantity        Int
-  prescription    Prescriptions @relation(fields: [prescription_id], references: [prescription_id],onDelete: Cascade)
-  medicine        Medicines     @relation(fields: [medicine_id], references: [medicine_id],onDelete: Cascade)
-  
+  prescription    Prescriptions @relation(fields: [prescription_id], references: [prescription_id], onDelete: Cascade)
+  medicine        Medicines     @relation(fields: [medicine_id], references: [medicine_id], onDelete: Cascade)
+
   @@id([prescription_id, medicine_id])
 }

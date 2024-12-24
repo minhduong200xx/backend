@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const medicalRecord = await prisma.medical_Records.findUnique({
-      where: { record_id: Number(params.id) },
+      where: { record_id: params.id },
       include: {
         patient: true,
         doctor: true,
@@ -40,7 +40,7 @@ export async function PUT(
   const data = await req.json();
   try {
     const medicalRecord = await prisma.medical_Records.findUnique({
-      where: { record_id: Number(params.id) },
+      where: { record_id: params.id },
       include: {
         patient: true,
         doctor: true,
@@ -53,7 +53,7 @@ export async function PUT(
       );
     }
     const updatedRecord = await prisma.medical_Records.update({
-      where: { record_id: Number(params.id) },
+      where: { record_id: params.id },
       data,
     });
     return NextResponse.json(updatedRecord);
@@ -73,7 +73,7 @@ export async function DELETE(
 ) {
   try {
     const medicalRecord = await prisma.medical_Records.findUnique({
-      where: { record_id: Number(params.id) },
+      where: { record_id: params.id },
       include: {
         patient: true,
         doctor: true,
@@ -86,7 +86,7 @@ export async function DELETE(
       );
     }
     const deletedRecord = await prisma.medical_Records.delete({
-      where: { record_id: Number(params.id) },
+      where: { record_id: params.id },
     });
     return NextResponse.json(deletedRecord);
   } catch (error) {

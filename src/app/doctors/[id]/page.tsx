@@ -15,7 +15,7 @@ import { getDoctorById } from "../../lib/doctors";
 import { Doctor } from "../../types/type";
 import moment from "moment";
 import { bookingAppointment } from "@/app/lib/patients";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Loading from "@/app/loading";
 
 import { CheckCircleFilled, InfoCircleOutlined } from "@ant-design/icons";
@@ -30,6 +30,7 @@ export default function DoctorDetailsPage() {
   const params = useParams();
   const [slotTime, setSlotTime] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
+  const router = useRouter();
   const { user, getAuth } = useAuth();
   const setValues = async () => {
     if (user && user.role_id === 2) {
@@ -105,10 +106,11 @@ export default function DoctorDetailsPage() {
     try {
       if (doctor?.doctor_id !== undefined) {
         await bookingAppointment(values);
-        message.success("Appointment booked successfully!");
+        messageApi.success("Appointment booked successfully!");
         setIsModalVisible(false);
+        router.push("/my-appointment");
       } else {
-        message.error("Doctor ID is missing.");
+        messageApi.error("Error booking appointment.");
       }
     } catch (error) {
       console.error("Error booking appointment:", error);
@@ -218,7 +220,7 @@ export default function DoctorDetailsPage() {
         footer={null}
       >
         <Form name="booking-appointment" form={form} onFinish={handleFinish}>
-          <Form.Item name="patient_id" label="Patient ID">
+          <Form.Item name="patient_id" label="Patient ID" hidden>
             <Input disabled />
           </Form.Item>
           <Form.Item name="first_name" label="First Name">
@@ -227,7 +229,7 @@ export default function DoctorDetailsPage() {
           <Form.Item name="last_name" label="Last Name">
             <Input disabled />
           </Form.Item>
-          <Form.Item name="doctor_id" label="Doctor ID">
+          <Form.Item name="doctor_id" label="Doctor ID" hidden>
             <Input disabled />
           </Form.Item>
           <Form.Item name="amount" label="Amount">
