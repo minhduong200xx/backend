@@ -11,16 +11,17 @@ import {
   Row,
   Col,
 } from "antd";
-import { getDoctorById } from "../../lib/doctors";
-import { Doctor } from "../../types/type";
+import { getDoctorById } from "../../../lib/doctors";
+import { Doctor } from "../../../types/type";
 import moment from "moment";
-import { bookingAppointment } from "@/app/lib/patients";
+import { bookingAppointment } from "@/lib/patients";
 import { useParams, useRouter } from "next/navigation";
 import Loading from "@/app/loading";
 
 import { CheckCircleFilled, InfoCircleOutlined } from "@ant-design/icons";
-import { useAuth } from "@/app/context/AuthProvider";
-import { changeUserToPatient } from "@/app/lib/users";
+import { useAuth } from "@/context/AuthProvider";
+import { changeUserToPatient } from "@/lib/users";
+import { useAppContext } from "@/context/AppProvider";
 
 export default function DoctorDetailsPage() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
@@ -29,7 +30,7 @@ export default function DoctorDetailsPage() {
   const [form] = Form.useForm();
   const params = useParams();
   const [slotTime, setSlotTime] = useState("");
-  const [messageApi, contextHolder] = message.useMessage();
+  const { messageApi } = useAppContext();
   const router = useRouter();
   const { user, getAuth } = useAuth();
   const setValues = async () => {
@@ -68,9 +69,7 @@ export default function DoctorDetailsPage() {
   const showModal = async () => {
     if (!user) {
       messageApi.warning("Please login to book an appointment.");
-    }
-
-    setIsModalVisible(true);
+    } else setIsModalVisible(true);
   };
 
   const handleCancel = () => {
@@ -108,7 +107,9 @@ export default function DoctorDetailsPage() {
         await bookingAppointment(values);
         messageApi.success("Appointment booked successfully!");
         setIsModalVisible(false);
-        router.push("/my-appointment");
+        setTimeout(() => {
+          router.push("/my-appointment");
+        }, 2000);
       } else {
         messageApi.error("Error booking appointment.");
       }
@@ -128,12 +129,16 @@ export default function DoctorDetailsPage() {
 
   return (
     <div className="p-8">
-      {contextHolder}
       <div className="flex flex-col sm:flex-row gap-4">
-        <Image src={"/img1.jpeg"} width={400} className="rounded-xl" />
+        <Image
+          src={doctor.image}
+          width={300}
+          className="rounded-xl"
+          style={{ backgroundColor: "#2563EB" }}
+        />
         <div className="flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 sm:mt-0 mt-[-80px]">
           <p className="flex items-center gap-2 text-2xl font-medium text-gray-900">
-            {doctor.first_name + " " + doctor.last_name}
+            {"Dr." + doctor.first_name + " " + doctor.last_name}
             <CheckCircleFilled
               style={{
                 color: "green",
@@ -169,19 +174,33 @@ export default function DoctorDetailsPage() {
         </div>
       </div>
 
-      <div className="sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
+      <div className="sm:ml-72 mt-4 font-medium text-gray-700 pl-8">
         <Form name="booking-appointment" form={form}>
           <Row gutter={16}>
             <Col span={10}>
               <Form.Item
                 name="appointment_date_time"
-                label="Chose An Appointment Date & Time"
+                label="Choose An Appointment Date & Time"
                 rules={[
                   { required: true, message: "Please select a date and time" },
                 ]}
               >
                 <DatePicker
-                  showTime={{ format: "HH:mm" }}
+                  showTime={{
+                    format: "HH:mm",
+                    disabledHours: () => {
+                      const hours = [];
+                      for (let i = 0; i < 24; i++) {
+                        if (i < 8 || i > 17) {
+                          hours.push(i);
+                        }
+                      }
+                      return hours;
+                    },
+                  }}
+                  disabledDate={(current) => {
+                    return current && current < moment().startOf("day");
+                  }}
                   format="YYYY-MM-DD HH:mm"
                   onChange={(date) => {
                     form.setFieldValue("appointmentDateTime", date),
@@ -196,7 +215,7 @@ export default function DoctorDetailsPage() {
                 type="primary"
                 onClick={handleCheckSlot}
                 className="text-white text-sm font-light rounded-full"
-                style={{ backgroundColor: "green" }}
+                style={{ backgroundColor: "#16A34A", fontWeight: 500 }}
               >
                 Check Availability
               </Button>
@@ -208,6 +227,7 @@ export default function DoctorDetailsPage() {
           type="primary"
           onClick={showModal}
           className="bg-primary text-white text-sm font-light  rounded-full "
+          style={{ fontWeight: 500 }}
         >
           Book an Appointment
         </Button>
@@ -241,7 +261,21 @@ export default function DoctorDetailsPage() {
             rules={[{ required: true, message: "Please select a date" }]}
           >
             <DatePicker
-              showTime={{ format: "HH:mm" }}
+              showTime={{
+                format: "HH:mm",
+                disabledHours: () => {
+                  const hours = [];
+                  for (let i = 0; i < 24; i++) {
+                    if (i < 8 || i > 17) {
+                      hours.push(i);
+                    }
+                  }
+                  return hours;
+                },
+              }}
+              disabledDate={(current) => {
+                return current && current < moment().startOf("day");
+              }}
               format="YYYY-MM-DD HH:mm"
             />
           </Form.Item>

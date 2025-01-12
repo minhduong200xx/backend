@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Table, message, Button } from "antd";
-import { Appointment } from "../types/type";
-import { useAuth } from "@/app/context/AuthProvider";
+import { Appointment } from "../../types/type";
+import { useAuth } from "@/context/AuthProvider";
 import Loading from "@/app/loading";
 import {
   getPatientAppointments,
   cancelPatientAppointment,
-} from "../lib/patients";
+} from "../../lib/patients";
 
 const MyAppointmentsPage: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -59,6 +59,12 @@ const MyAppointmentsPage: React.FC = () => {
       dataIndex: "appointment_date_time",
       key: "appointment_date_time",
       render: (text: string) => new Date(text).toLocaleString(),
+    },
+    {
+      title: "Doctor",
+      dataIndex: "doctor_name",
+      key: "doctor_name",
+      render: () => "Dr. " + "A",
     },
     {
       title: "Reason",

@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Input, Select, Row, Col } from "antd";
+import { Input, Select, Row, Col, Empty } from "antd";
 import "tailwindcss/tailwind.css";
-import DoctorCard from "../components/Common/Card/DoctorCard";
-import { getDoctors } from "../lib/doctors";
-import { Doctor } from "../types/type";
+import DoctorCard from "../../components/Common/Card/DoctorCard";
+import { getDoctors } from "../../lib/doctors";
+import { Doctor } from "../../types/type";
 import { useRouter } from "next/navigation";
 
 const { Search } = Input;
@@ -42,7 +42,7 @@ const DoctorPage: React.FC = () => {
         .toLowerCase()
         .includes(searchText.toLowerCase());
       const matchesSpecialty = specialtyFilter
-        ? doctor.specialty === specialtyFilter
+        ? doctor.speciality === specialtyFilter
         : true;
       const matchesExperience = experienceFilter
         ? (doctor.experience_years ?? 0) >= experienceFilter
@@ -85,13 +85,13 @@ const DoctorPage: React.FC = () => {
             allowClear
             className="w-40"
           >
-            {Array.from(new Set(doctors.map((doctor) => doctor.specialty))).map(
-              (specialty, index) => (
-                <Option key={index} value={specialty}>
-                  {specialty}
-                </Option>
-              )
-            )}
+            {Array.from(
+              new Set(doctors.map((doctor) => doctor.speciality))
+            ).map((specialty, index) => (
+              <Option key={index} value={specialty}>
+                {specialty}
+              </Option>
+            ))}
           </Select>
           <Select
             placeholder="Filter by Experience Years"
@@ -111,21 +111,31 @@ const DoctorPage: React.FC = () => {
         </div>
       </div>
       <Row gutter={[16, 16]}>
-        {filteredDoctors.map((doctor, index) => (
-          <Col key={index} xs={24} sm={12} md={8} lg={6}>
-            <DoctorCard
-              name={doctor.first_name + " " + doctor.last_name}
-              specialty={doctor.specialty ?? ""}
-              available={doctor.available ?? false}
-              onBookAppointment={() =>
-                handleBookAppointment(
-                  doctor.first_name + " " + doctor.last_name
-                )
-              }
-              onViewProfile={() => router.push(`/doctors/${doctor.doctor_id}`)}
-            />
-          </Col>
-        ))}
+        {filteredDoctors.length > 0 ? (
+          filteredDoctors.map((doctor, index) => (
+            <Col key={index} xs={24} sm={12} md={8} lg={6}>
+              <DoctorCard
+                name={doctor.first_name + " " + doctor.last_name}
+                speciality={doctor.speciality ?? ""}
+                experience={doctor.experience_years ?? 0}
+                available={doctor.available ?? false}
+                imgUrl={doctor.image ?? ""}
+                onBookAppointment={() =>
+                  handleBookAppointment(
+                    doctor.first_name + " " + doctor.last_name
+                  )
+                }
+                onViewProfile={() =>
+                  router.push(`/doctors/${doctor.doctor_id}`)
+                }
+              />
+            </Col>
+          ))
+        ) : (
+          <div className="text-center w-full">
+            <Empty />
+          </div>
+        )}
       </Row>
     </div>
   );

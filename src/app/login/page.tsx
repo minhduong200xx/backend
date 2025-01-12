@@ -4,13 +4,13 @@ import { Modal, Button, Form, Input, message, Image } from "antd";
 import ReCAPTCHA from "react-google-recaptcha";
 import { signIn, useSession } from "next-auth/react";
 
-import { useAuth } from "../context/AuthProvider";
-import { CarouselSection } from "../components/Pages/HomePage/CarouselSection";
+import { useAuth } from "../../context/AuthProvider";
+import { useAppContext } from "../../context/AppProvider";
 
 const LoginModal: React.FC = () => {
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const { logIn, user } = useAuth();
-  const [messageApi, contextHolder] = message.useMessage();
+  const { messageApi } = useAppContext();
   const onFinish = async (values: any) => {
     if (!captchaValue) {
       messageApi.open({
@@ -18,25 +18,26 @@ const LoginModal: React.FC = () => {
         content: "Please complete the captcha challenge.",
         duration: 2,
       });
+      return;
     }
 
     try {
       await logIn(values.email, values.password);
-      messageApi.open({
-        type: "success",
-        content:
-          "You have successfully logged in. You will be redirected to the home page.",
-        duration: 2,
-      });
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 500);
-    } catch (error) {
-      messageApi.open({
-        type: "error",
-        content: "Invalid email or password. Please try again.",
-        duration: 2,
-      });
+      window.location.href = "/";
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        messageApi.open({
+          type: "error",
+          content: "Your account is inactive. Please contact the admin.",
+          duration: 2,
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "Invalid email or password. Please try again.",
+          duration: 2,
+        });
+      }
     }
   };
 
@@ -57,7 +58,6 @@ const LoginModal: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-      {contextHolder}
       {user ? (
         <div className="text-center">
           <p>You have already logged in.</p>
@@ -82,7 +82,8 @@ const LoginModal: React.FC = () => {
                 label="Email"
                 name="email"
                 rules={[
-                  { required: true, message: "Please input your username!" },
+                  { required: true, message: "Please input your email!" },
+                  { type: "email", message: "The input is not valid E-mail!" },
                 ]}
               >
                 <Input />

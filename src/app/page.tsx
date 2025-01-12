@@ -1,17 +1,17 @@
 "use client";
 import React from "react";
-import HomePageLayout from "./components/Common/Layout/HomePageLayout";
-import { CarouselSection } from "./components/Pages/HomePage/CarouselSection";
-import SearchSection from "./components/Pages/HomePage/SearchSection";
-import BookingSection from "./components/Pages/HomePage/BookingSection";
-import SpecialtySection from "./components/Pages/HomePage/SpecialtySection";
-import TopDoctorsSection from "./components/Pages/HomePage/TopDoctorsSection";
+import HomePageLayout from "../components/Common/Layout/HomePageLayout";
+import { BannerSection } from "../components/Pages/HomePage/BannerSection";
+import SearchSection from "../components/Pages/HomePage/SearchSection";
+import BookingSection from "../components/Pages/HomePage/BookingSection";
+import SpecialtySection from "../components/Pages/HomePage/SpecialtySection";
+import TopDoctorsSection from "../components/Pages/HomePage/TopDoctorsSection";
 
 const HomePage: React.FC = () => {
   return (
     <HomePageLayout>
-      <div className="home-page mx-auto w-full bg-gradient-to-bl from-[#9de8f4] to-blue-100">
-        <CarouselSection />
+      <div className="home-page px-20 py-4 w-full bg-gradient-to-bl">
+        <BannerSection />
         <SearchSection />
         <BookingSection />
         <SpecialtySection />

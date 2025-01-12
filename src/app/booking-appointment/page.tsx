@@ -13,7 +13,7 @@ import {
   Select,
 } from "antd";
 import moment from "moment";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 
 const BookingAppointmentPage: React.FC = () => {
   const [form] = Form.useForm();

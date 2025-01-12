@@ -66,7 +66,6 @@ const RegisterPage: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-      {contextHolder}
       <div className="flex flex-row justify-center items-center gap-10">
         <h1 className="text-9xl text-white font-bold">Join Us!</h1>
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

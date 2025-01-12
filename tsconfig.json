@@ -29,8 +29,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/components/Common/Card",
-    "src/app/types/next-auth.d.ts"
+    "src/components/Common/Card",
+    "src/types/next-auth.d.ts"
   ],
   "exclude": ["node_modules"]
 }

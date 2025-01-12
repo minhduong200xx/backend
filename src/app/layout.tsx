@@ -5,7 +5,9 @@ import "./globals.css";
 
 import { Suspense, useState } from "react";
 import Loading from "./loading";
-import { AuthProvider } from "./context/AuthProvider";
+import { AuthProvider } from "../context/AuthProvider";
+import { AppProvider } from "../context/AppProvider";
+import { SWRConfig } from "swr";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,11 +30,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <Suspense fallback={<Loading />}>
-            <AntdRegistry>{children}</AntdRegistry>
-          </Suspense>
-        </AuthProvider>
+        <SWRConfig
+          value={{
+            refreshInterval: 3000,
+            fetcher: (resource, init) =>
+              fetch(resource, init).then((res) => res.json()),
+          }}
+        >
+          <AppProvider>
+            <AuthProvider>
+              <Suspense fallback={<Loading />}>
+                <AntdRegistry>{children}</AntdRegistry>
+              </Suspense>
+            </AuthProvider>
+          </AppProvider>
+        </SWRConfig>
       </body>
     </html>
   );

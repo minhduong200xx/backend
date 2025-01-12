@@ -1,4 +1,4 @@
-import { RegisterRequest } from "@/app/types/type";
+import { RegisterRequest } from "@/types/type";
 import axios from "axios";
 
 export default async function register(data: RegisterRequest) {
